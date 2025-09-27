@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 
 @Config
@@ -57,9 +59,9 @@ public class riptideUtil {
                         20,
                         "Blue Goal",
                         6.5,
-                        //new VectorF(−1.482, −1.413, 0.749),
-                        DistanceUnit.INCH//,
-                        //Quaternion.identityQuaternion()
+                        new VectorF(-0f, -0f, 0f),
+                        DistanceUnit.INCH,
+                        Quaternion.identityQuaternion()
                 )
                 .addTag(
                         21,
@@ -83,9 +85,9 @@ public class riptideUtil {
                         24,
                         "Red Goal",
                         6.5,
-                        //new VectorF(),
-                        DistanceUnit.INCH
-                        //Quaternion.identityQuaternion()
+                        new VectorF(-0f, -0f, -0f),
+                        DistanceUnit.INCH,
+                        Quaternion.identityQuaternion()
                 )
                 .build();
     }

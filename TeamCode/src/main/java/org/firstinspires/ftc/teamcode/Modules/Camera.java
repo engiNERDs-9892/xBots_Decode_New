@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Modules;
 // --- CONSTANTS & OTHER STUFF --- //
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.riptideUtil;
 
 // --- CAMERA --- //
@@ -169,6 +170,18 @@ public class Camera {
 //        blobs.add(new ArrayList<>(Arrays.asList((double) circle_fit.getX(), (double) circle_fit.getY() /*blob.getCircularity(), distance*/)));
 
         return blobs;
+    }
+
+    public EditablePose2D localize() {
+        for(AprilTagDetection detection : detections) {
+            if (!detection.metadata.name.contains("Obelisk")) {
+                return new EditablePose2D(
+                        detection.robotPose.getPosition().x,
+                        detection.robotPose.getPosition().y, 0,
+                        DistanceUnit.INCH);
+            }
+        }
+
     }
 
     // the default is ALL
