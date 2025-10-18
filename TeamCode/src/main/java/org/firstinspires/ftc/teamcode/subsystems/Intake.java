@@ -9,15 +9,15 @@ public final class Intake {
 	private final DcMotorEx intake;
 	private double intakeSpeed = 0;
 
-	public Intake(HardwareMap hardwareMap) {
-		intake = hardwareMap.get(DcMotorEx.class, "intake");
+	public Intake(String intakeName, HardwareMap hardwareMap) {
+		intake = hardwareMap.get(DcMotorEx.class, intakeName);
 	}
 
 	public void update(Gamepad gamepad) {
-		if (gamepad.left_bumper) {
-			intakeSpeed = -1.0;
-		} else if (gamepad.right_bumper) {
-			intakeSpeed = 1.0;
+		if (gamepad.right_trigger > 0.0) {
+			intakeSpeed = gamepad.right_trigger;
+		} else {
+			intakeSpeed = -gamepad.left_trigger;
 		}
 
 		intake.setPower(intakeSpeed);

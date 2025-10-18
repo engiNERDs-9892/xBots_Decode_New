@@ -9,14 +9,14 @@ public final class Drivebase {
     private final double turnSpeed;
     private final DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
 
-    public Drivebase(double cardinalSpeed, double turnSpeed, HardwareMap hardwareMap) {
+    public Drivebase(String leftFront, String leftBack, String rightFront, String rightBack, double cardinalSpeed, double turnSpeed, HardwareMap hardwareMap) {
         this.cardinalSpeed = cardinalSpeed;
         this.turnSpeed = turnSpeed;
 
-        leftFrontDrive = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftBackDrive = hardwareMap.get(DcMotorEx.class, "leftBack");
-        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "rightFront");
-        rightBackDrive = hardwareMap.get(DcMotorEx.class, "rightBack");
+        leftFrontDrive = hardwareMap.get(DcMotorEx.class, leftFront);
+        leftBackDrive = hardwareMap.get(DcMotorEx.class, leftBack);
+        rightFrontDrive = hardwareMap.get(DcMotorEx.class, rightFront);
+        rightBackDrive = hardwareMap.get(DcMotorEx.class, rightBack);
 
         leftFrontDrive.setDirection(DcMotorEx.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotorEx.Direction.FORWARD);

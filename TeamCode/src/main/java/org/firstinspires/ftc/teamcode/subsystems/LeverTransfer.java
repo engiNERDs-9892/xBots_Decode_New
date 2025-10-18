@@ -11,10 +11,10 @@ public final class LeverTransfer {
 	private boolean leverTargetIsUpPosition = false;
 	private boolean dpadUpPressedLastFrame, dpadDownPressedLastFrame = false;
 
-    public LeverTransfer(double leverDownPosition, double startingLeverUpPosition, HardwareMap hardwareMap) {
+    public LeverTransfer(String leverTransferName, double leverDownPosition, double startingLeverUpPosition, HardwareMap hardwareMap) {
 		this.leverDownPosition = leverDownPosition;
 		this.leverUpPosition = startingLeverUpPosition;
-		leverTransfer = hardwareMap.get(Servo.class, "leverTransfer");
+		leverTransfer = hardwareMap.get(Servo.class, leverTransferName);
 	}
 
 	public void update(Gamepad gamepad) {
@@ -40,6 +40,6 @@ public final class LeverTransfer {
 	}
 
 	public String getTelemetryData() {
-		return String.format("Lever Up Position: %f\nLever Is Up: %f", leverUpPosition, leverTargetIsUpPosition);
+		return String.format("Lever Up Position: %f\nLever Is Up: %b", leverUpPosition, leverTargetIsUpPosition);
 	}
 }
