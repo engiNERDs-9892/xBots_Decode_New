@@ -52,12 +52,12 @@ public class FlywheelServo {
             }
         }
     }
-    public void doubleA(boolean input1, boolean input2) {
+    public void doubleA(boolean input1, boolean input2, double flywheelPower) {
 
         if (input1 && !lastButtonState) {
             motorRunning = !motorRunning;
         }
-        FlywheelMotor.setPower(motorRunning ? 0.475 : 0.0);
+        FlywheelMotor.setPower(motorRunning ? flywheelPower : 0.0);
         lastButtonState = input1;
 
         if (input2 && !buttonPressed) {
@@ -68,7 +68,7 @@ public class FlywheelServo {
         }
 
         if (movementStarted && !movementCompleted) {
-            if (timer.seconds() < 0.30) { //change value in (sec)
+            if (timer.seconds() < 0.10) { //change value in (sec)
                 leftServo.setPower(1.0);
                 rightServo.setPower(1.0);
             } else {
