@@ -12,10 +12,6 @@ public class Trigger {
 		this.action = action;
 	}
 
-	public void schedule() {
-		Scheduler.getInstance().addTrigger(this);
-	}
-
 	public boolean check() {
 		return condition.evaluate();
 	}

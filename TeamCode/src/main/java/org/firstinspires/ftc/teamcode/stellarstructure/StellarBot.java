@@ -3,9 +3,6 @@ package org.firstinspires.ftc.teamcode.stellarstructure;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-
-//Stellar, Wormholes, Docking Procedure, Murphy's Law, Procedure
-
 public class StellarBot {
 	protected final Subsystem[] subsystems;
 
@@ -44,9 +41,13 @@ public class StellarBot {
 
 	public String getTelemetryData() {
 		StringBuilder telemetry = new StringBuilder();
+
 		for (Subsystem subsystem: subsystems) {
 			telemetry.append(subsystem.getTelemetryData()).append('\n');
 		}
+
+		telemetry.append(Scheduler.getInstance().getTelemetry());
+
 		return telemetry.toString();
 	}
 

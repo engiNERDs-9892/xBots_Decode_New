@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.directives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 
@@ -33,8 +32,6 @@ public class DefaultDrivebase extends DefaultDirective {
 		rightFrontPower = axial - lateral - yaw;
 		leftBackPower = axial - lateral + yaw;
 		rightBackPower = axial + lateral - yaw;
-		//leftBackPower = axial + lateral - yaw;
-		//rightBackPower = axial - lateral + yaw;
 
 		// normalize the values so no wheel power exceeds 100%
 		// this ensures that the robot maintains the desired motion

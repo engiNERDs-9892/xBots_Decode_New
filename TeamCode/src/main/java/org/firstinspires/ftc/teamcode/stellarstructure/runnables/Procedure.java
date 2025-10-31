@@ -19,17 +19,13 @@ public class Procedure extends Runnable {
 
         this.directives = directives;
 
-        List<Subsystem> requiredSubsystems = new ArrayList<>();
-        for (Directive directive : directives) {
-			requiredSubsystems.addAll(Arrays.asList(directive.getRequiredSubsystems()));
-        }
-        setRequires(requiredSubsystems.toArray(new Subsystem[0]));
+        setRequires();
         setInterruptible(false);
     }
 
     @Override
     public void start(boolean hadToInterruptToStart) {
-        directives[0].start(false);
+        directives[0].schedule();
     }
 
     @Override
@@ -39,23 +35,18 @@ public class Procedure extends Runnable {
             return;
         }
 
-        Directive currentDirective = directives[currentDirectiveIndex];
-
-        if (currentDirective.isFinished()) {
-            currentDirective.stop(false);
+        // if current directive finished
+        if (directives[currentDirectiveIndex].getHasFinished()) {
+            // increase directive index
             currentDirectiveIndex++;
 
             if (currentDirectiveIndex >= directives.length) {
                 return;
             }
 
-            currentDirective = directives[currentDirectiveIndex];
-            currentDirective.start(false);
-
-            return;
+            // schedule next directive
+            directives[currentDirectiveIndex].schedule();
         }
-
-        currentDirective.update();
     }
 
     @Override

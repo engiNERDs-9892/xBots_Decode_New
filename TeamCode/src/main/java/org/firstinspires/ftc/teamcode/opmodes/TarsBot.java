@@ -1,13 +1,22 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import org.firstinspires.ftc.teamcode.core.TarsBase;
+import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
+import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
+import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "TARS -Ethan's Approval", group = "Robot")
-public class TARS extends LinearOpMode {
-	final TarsBase tars = new TarsBase();
+public class TarsBot extends LinearOpMode {
+	final StellarBot tars = new StellarBot(
+			Drivebase.getInstance(),
+			Intake.getInstance(),
+			LeverTransfer.getInstance(),
+			Spindexer.getInstance()
+	);
 
 	@Override
 	public void runOpMode() {

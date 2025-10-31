@@ -73,6 +73,14 @@ public final class Spindexer extends Subsystem {
 		);
 	}
 
+	public boolean getIsIntakePosition() {
+		return isIntakePosition;
+	}
+
+	public int getSelectedSegment() {
+		return selectedSegment;
+	}
+
 	@Override
 	public String getTelemetryData() {
 		return String.format(
@@ -83,13 +91,5 @@ public final class Spindexer extends Subsystem {
 				selectedSegment, isIntakePosition, beamBreak.getState(),
 				colorSensor.red(), colorSensor.green(), colorSensor.blue()
 		);
-	}
-
-	public boolean getIsIntakePosition() {
-		return isIntakePosition;
-	}
-
-	public int getSelectedSegment() {
-		return selectedSegment;
 	}
 }

@@ -9,10 +9,11 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
 
 public class DefaultLeverTransfer extends DefaultDirective {
+	//todo: implement starting conditions and directives and procedures
 	public DefaultLeverTransfer(LeverTransfer leverTransfer, Gamepad gamepad) {
 		super(leverTransfer);
 
-		new Trigger(
+		addTrigger(new Trigger(
 				new StatefulCondition(
 						new GamepadButton(gamepad, GamepadButton.Button.DPAD_UP),
 						StatefulCondition.Edge.RISING //On initial press
@@ -21,9 +22,9 @@ public class DefaultLeverTransfer extends DefaultDirective {
 					leverTransfer.setLeverPositionIsUp(true);
 					leverTransfer.updateServoPosition();
 				}
-		).schedule();
+		));
 
-		new Trigger(
+		addTrigger(new Trigger(
 				new StatefulCondition(
 						new GamepadButton(gamepad, GamepadButton.Button.DPAD_DOWN),
 						StatefulCondition.Edge.RISING //On initial press
@@ -32,9 +33,9 @@ public class DefaultLeverTransfer extends DefaultDirective {
 					leverTransfer.setLeverPositionIsUp(false);
 					leverTransfer.updateServoPosition();
 				}
-		).schedule();
+		));
 
-		new Trigger(
+		addTrigger(new Trigger(
 				new StatefulCondition(
 						new GamepadButton(gamepad, GamepadButton.Button.DPAD_LEFT),
 						StatefulCondition.Edge.RISING //On initial press
@@ -43,6 +44,6 @@ public class DefaultLeverTransfer extends DefaultDirective {
 					leverTransfer.toggleLeverPosition();
 					leverTransfer.updateServoPosition();
 				}
-		).schedule();
+		));
 	}
 }

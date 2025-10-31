@@ -14,20 +14,20 @@ public class DefaultIntake extends DefaultDirective {
 
 		//todo: make if/else
 
-		new Trigger(
+		addTrigger(new Trigger(
 				() -> gamepad.left_trigger > 0.05, //when left trigger pressed
 				() -> {intake.setIntakeSpeed(-gamepad.left_trigger);} //set intake to left trigger
-		).schedule();
+		));
 
-		new Trigger(
+		addTrigger(new Trigger(
 				() -> gamepad.right_trigger > 0.05, //when right trigger pressed
 				() -> {intake.setIntakeSpeed(gamepad.right_trigger);} //set intake to right trigger
-		).schedule();
+		));
 
-		new Trigger(
+		addTrigger(new Trigger(
 				() -> (gamepad.right_trigger <= 0.05) == (gamepad.left_trigger <= 0.05), //neither or both triggers are pressed
 				() -> {intake.setIntakeSpeed(0);} //set intake speed to 0
-		).schedule();
+		));
 	}
 
 	@Override
