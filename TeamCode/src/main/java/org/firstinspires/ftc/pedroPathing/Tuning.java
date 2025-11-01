@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.robotcontroller.pedroPathing;
+package org.firstinspires.ftc.pedroPathing;
 
-import static org.firstinspires.ftc.robotcontroller.pedroPathing.Tuning.changes;
-import static org.firstinspires.ftc.robotcontroller.pedroPathing.Tuning.drawCurrent;
-import static org.firstinspires.ftc.robotcontroller.pedroPathing.Tuning.drawCurrentAndHistory;
-import static org.firstinspires.ftc.robotcontroller.pedroPathing.Tuning.follower;
-import static org.firstinspires.ftc.robotcontroller.pedroPathing.Tuning.stopRobot;
-import static org.firstinspires.ftc.robotcontroller.pedroPathing.Tuning.telemetryM;
+import static org.firstinspires.ftc.pedroPathing.Tuning.changes;
+import static org.firstinspires.ftc.pedroPathing.Tuning.drawCurrent;
+import static org.firstinspires.ftc.pedroPathing.Tuning.drawCurrentAndHistory;
+import static org.firstinspires.ftc.pedroPathing.Tuning.follower;
+import static org.firstinspires.ftc.pedroPathing.Tuning.stopRobot;
+import static org.firstinspires.ftc.pedroPathing.Tuning.telemetryM;
 
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
@@ -177,7 +177,7 @@ class LocalizationTest extends OpMode {
  * @version 1.0, 5/6/2024
  */
 class ForwardTuner extends OpMode {
-    public static double DISTANCE = 48;
+    public static double DISTANCE = 120;
 
     @Override
     public void init() {
@@ -224,7 +224,7 @@ class ForwardTuner extends OpMode {
  * @version 2.0, 6/26/2025
  */
 class LateralTuner extends OpMode {
-    public static double DISTANCE = 48;
+    public static double DISTANCE = 100;
 
     @Override
     public void init() {
@@ -322,7 +322,7 @@ class TurnTuner extends OpMode {
  */
 class ForwardVelocityTuner extends OpMode {
     private final ArrayList<Double> velocities = new ArrayList<>();
-    public static double DISTANCE = 48;
+    public static double DISTANCE = 120;
     public static double RECORD_NUMBER = 10;
 
     private boolean end;
@@ -428,7 +428,7 @@ class ForwardVelocityTuner extends OpMode {
 class LateralVelocityTuner extends OpMode {
     private final ArrayList<Double> velocities = new ArrayList<>();
 
-    public static double DISTANCE = 48;
+    public static double DISTANCE = 100;
     public static double RECORD_NUMBER = 10;
 
     private boolean end;
@@ -527,7 +527,7 @@ class LateralVelocityTuner extends OpMode {
  */
 class ForwardZeroPowerAccelerationTuner extends OpMode {
     private final ArrayList<Double> accelerations = new ArrayList<>();
-    public static double VELOCITY = 30;
+    public static double VELOCITY = 75;
 
     private double previousVelocity;
     private long previousTimeNano;
@@ -631,7 +631,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
  */
 class LateralZeroPowerAccelerationTuner extends OpMode {
     private final ArrayList<Double> accelerations = new ArrayList<>();
-    public static double VELOCITY = 30;
+    public static double VELOCITY = 50;
     private double previousVelocity;
     private long previousTimeNano;
     private boolean stopping;

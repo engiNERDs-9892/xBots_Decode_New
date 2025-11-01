@@ -63,6 +63,11 @@ public final class LeverTransfer extends Subsystem {
 		return !isLeverTargetUp;
 	}
 
+	public StellarServo getLeverTransferServo() {
+		return this.leverTransferServo;
+
+	}
+
 	@Override
 	public String getTelemetryData() {
 		return String.format("Lever Up Position: %f\nLever Is Up: %b", LEVER_UP_POSITION, isLeverTargetUp);
