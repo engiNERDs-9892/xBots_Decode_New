@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
 public class DefaultDirective extends Directive {
     public DefaultDirective(Subsystem subsystem) {
-        setRequires(subsystem);
+        setRequiredSubsystems(subsystem);
         setInterruptible(true);
     }
 

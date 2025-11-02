@@ -11,8 +11,6 @@ public abstract class Subsystem {
 	public abstract void setGamepads(Gamepad gamepad1, Gamepad gamepad2);
 	public abstract void update();
 
-	public abstract String getTelemetryData();
-
 	public void setDefaultDirective(DefaultDirective defaultDirective) {
 		this.defaultDirective = defaultDirective;
 	}

@@ -57,7 +57,7 @@ public class LambdaDirective extends Directive {
 	}
 
 	public LambdaDirective requires(@NonNull Subsystem... subsystems) {
-		setRequires(subsystems);
+		setRequiredSubsystems(subsystems);
 		return this;
 	}
 

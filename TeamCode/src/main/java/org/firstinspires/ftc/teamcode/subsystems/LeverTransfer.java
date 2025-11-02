@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.directives.DefaultLeverTransfer;
@@ -7,8 +9,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.Stell
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.MoveTo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 
 public final class LeverTransfer extends Subsystem {
@@ -55,7 +55,7 @@ public final class LeverTransfer extends Subsystem {
 				isLeverTargetUp ? LEVER_UP_POSITION : LEVER_DOWN_POSITION,
 				0.01
 		).setStartingConditions(
-				() -> !Spindexer.getInstance().getIsIntakePosition()
+				() -> Spindexer.getInstance().getIsOuttakePosition()
 		).schedule();
 	}
 
@@ -68,8 +68,9 @@ public final class LeverTransfer extends Subsystem {
 
 	}
 
+	@NonNull
 	@Override
-	public String getTelemetryData() {
+	public String toString() {
 		return String.format("Lever Up Position: %f\nLever Is Up: %b", LEVER_UP_POSITION, isLeverTargetUp);
 	}
 }

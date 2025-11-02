@@ -30,7 +30,7 @@ public class SetPower extends Directive {
 	}
 
 	public SetPower requires(Subsystem... subsystems) {
-		setRequires(subsystems);
+		setRequiredSubsystems(subsystems);
 		return this;
 	}
 

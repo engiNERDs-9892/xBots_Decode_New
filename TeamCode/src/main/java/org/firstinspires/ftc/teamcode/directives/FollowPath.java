@@ -1,21 +1,20 @@
 package org.firstinspires.ftc.teamcode.directives;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 
 public class FollowPath extends Directive {
-    private PathChain path;
-    private Follower follower;
+    private final PathChain path;
+    private final Follower follower;
 
-    private boolean holdEnd;
+    private final boolean holdEnd;
 
     public FollowPath(PathChain path, Follower follower, boolean holdEnd) {
         setInterruptible(true);
-        setRequires(Drivebase.getInstance());
+        setRequiredSubsystems(Drivebase.getInstance());
         this.path = path;
         this.follower = follower;
         this.holdEnd = holdEnd;

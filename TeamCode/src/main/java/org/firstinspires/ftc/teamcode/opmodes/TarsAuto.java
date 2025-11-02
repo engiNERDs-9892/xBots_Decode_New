@@ -21,7 +21,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 
 @Autonomous(name = "Pedro", group = "Auto")
 public class TarsAuto extends OpMode {
-
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     final StellarBot tars = new StellarBot(
@@ -33,11 +32,8 @@ public class TarsAuto extends OpMode {
     private final Pose startPose = new Pose(56,9, Math.toRadians(90));
     private final Pose collect1Pose = new Pose(19, 35.5);
     private final Pose collect1Control = new Pose(56,35.5);
-    private PathChain path1;
-    private PathChain Path2;
-    private PathChain Path3;
-    private PathChain Path4;
-    private PathChain Path5;
+    private PathChain path1, path2, path3, path4, path5;
+
     public void buildPaths() {
         this.path1 = follower.pathBuilder()
                 .addPath(
@@ -49,7 +45,7 @@ public class TarsAuto extends OpMode {
 
     @Override
     public void init() {
-        follower = Constants.createFollower(hardwareMap);
+        this.follower = Constants.createFollower(hardwareMap);
         tars.init(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
@@ -60,24 +56,19 @@ public class TarsAuto extends OpMode {
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
                 new Sleep(0.03),
                 new FollowPath(path1, follower, false)
-
-
         ).schedule();
     }
-
-
 
     @Override
     public void loop() {
         tars.update();
+
         telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("isBusy()", follower.isBusy());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.addData("T: ", follower.getCurrentTValue());
-        telemetry.addLine(tars.getTelemetryData());
+        telemetry.addLine(tars.toString());
         telemetry.update();
-
     }
-
-
 }

@@ -31,7 +31,7 @@ public class SetPosition extends Directive {
 	public void stop(boolean interrupted) {}
 
 	public SetPosition requires(Subsystem... subsystems) {
-		setRequires(subsystems);
+		setRequiredSubsystems(subsystems);
 		return this;
 	}
 

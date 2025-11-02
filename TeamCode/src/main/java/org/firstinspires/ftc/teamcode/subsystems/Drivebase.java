@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -56,8 +58,9 @@ public final class Drivebase extends Subsystem {
         rightBackDrive.setPower(rightBackPower);
     }
 
-	@Override
-    public String getTelemetryData() {
+	@NonNull
+    @Override
+    public String toString() {
         return String.format("Left Front: %.2f\nRight Front: %.2f\nLeft Back: %.2f\nRight Back: %.2f",
                 leftFrontDrive.getPower(),
                 rightFrontDrive.getPower(),

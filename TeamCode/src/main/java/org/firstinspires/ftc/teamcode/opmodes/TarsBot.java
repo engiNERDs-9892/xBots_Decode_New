@@ -36,7 +36,7 @@ public class TarsBot extends LinearOpMode {
 
 			//print telemetry
 			try {
-				telemetry.addLine(tars.getTelemetryData());
+				telemetry.addLine(tars.toString());
 			} catch (Exception e) {
 				telemetry.addData("telemetry didn't work", e);
 			}
@@ -45,7 +45,8 @@ public class TarsBot extends LinearOpMode {
 
 			telemetry.update();
 		}
-		//cancel triggers and directives
+
+		//cancel triggers and runnables
 		tars.cancelAll();
 	}
 }

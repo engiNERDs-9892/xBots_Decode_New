@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.stellarstructure;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -39,14 +41,16 @@ public class StellarBot {
 		}
 	}
 
-	public String getTelemetryData() {
+	@NonNull
+	@Override
+	public String toString() {
 		StringBuilder telemetry = new StringBuilder();
 
 		for (Subsystem subsystem: subsystems) {
-			telemetry.append(subsystem.getTelemetryData()).append('\n');
+			telemetry.append(subsystem).append('\n');
 		}
 
-		telemetry.append(Scheduler.getInstance().getTelemetry());
+		telemetry.append(Scheduler.getInstance());
 
 		return telemetry.toString();
 	}

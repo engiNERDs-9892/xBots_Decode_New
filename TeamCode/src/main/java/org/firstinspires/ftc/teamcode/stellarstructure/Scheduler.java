@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.stellarstructure;
 
+
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Runnable;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,111 +16,106 @@ public class Scheduler {
 	private Scheduler() {}
 
 	//todo: make the waitlist optional with a boolean
-	//todo: add cancel method for runnables
+	//todo: reorganize order of methods and variables
 
 	public static Scheduler getInstance() {
 		return instance;
 	}
 
 	private final List<Subsystem> subsystems = new ArrayList<>();
-	private final List<Runnable> runnableScheduleQueue = new ArrayList<>();
+	private final List<Runnable> pendingRunnables = new ArrayList<>();
 	private final List<Runnable> activeRunnables = new ArrayList<>();
 	private final List<Trigger> activeTriggers = new ArrayList<>();
 
 	private final List<Runnable> runnablesToAdd = new ArrayList<>();
 	private final List<Runnable> runnablesToRemove = new ArrayList<>();
 
-	public void addSubsystem(Subsystem subsystem) {
+	public final void addSubsystem(Subsystem subsystem) {
 		subsystems.add(subsystem);
 	}
 
-	public void addTrigger(Trigger trigger) {
-		activeTriggers.add(trigger);
+	public final void removeSubsystem(Subsystem subsystem) {
+		subsystems.remove(subsystem);
 	}
 
-	public void removeTrigger(Trigger trigger) {
-		activeTriggers.remove(trigger);
+	public void addTrigger(@NonNull Trigger trigger) {
+		this.activeTriggers.add(trigger);
+	}
+
+	public void removeTrigger(@NonNull Trigger trigger) {
+		this.activeTriggers.remove(trigger);
 	}
 
 	private boolean checkStartingConditions(@NonNull Runnable runnable) {
 		Condition[] conditions = runnable.getStartingConditions();
+
+		// return false if any starting conditions are not met
 		for (Condition condition : conditions) {
 			if (!condition.evaluate()) {
 				return false;
 			}
 		}
 
+		// all conditions met
 		return true;
 	}
 
-	private boolean startRunnable(Runnable runnableToStart) {
+	private boolean hasUninterruptibleConflict(Runnable runnableToCheck, List<Runnable> runnables) {
+		for (Runnable runningRunnable : runnables) {
+			for (Subsystem requiredByNew : runnableToCheck.getRequiredSubsystems()) {
+				for (Subsystem requiredByRunning : runningRunnable.getRequiredSubsystems()) {
+					if (requiredByNew == requiredByRunning && !runningRunnable.getInterruptible()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean interruptConflictingRunnables(Runnable runnableToCheck, List<Runnable> runnables) {
 		boolean didInterrupt = false;
 
-		//todo: make "runnables to remove" a function and make it check for if its already present
-
-
-		//todo: maybe fix the thing where runnables will be removed even if the whole process isn't finished
-		// for every running directive
-
-		//todo: combine the 2 for loops into 1 at some point
-		for (Runnable activeRunnable : this.activeRunnables) {
-			// check for conflicts
-			CONFLICT_CHECK:
-			// for every subsystem required by the new directive
-			for (Subsystem requiredByNew : runnableToStart.getRequiredSubsystems()) {
-				// for every subsystem required by the running directive
-				for (Subsystem requiredByRunning : activeRunnable.getRequiredSubsystems()) {
+		for (Runnable runningRunnable : runnables) {
+			if (this.runnablesToRemove.contains(runningRunnable)) {
+				continue;
+			}
+			for (Subsystem requiredByNew : runnableToCheck.getRequiredSubsystems()) {
+				for (Subsystem requiredByRunning : runningRunnable.getRequiredSubsystems()) {
 					if (requiredByNew == requiredByRunning) {
-						// CONFLICT FOUND!
-
-						if (activeRunnable.getInterruptible()) {
-							runnablesToRemove.add(activeRunnable);
-							didInterrupt = true;
-						} else {
-							// running command unable to be interrupted, so can't schedule new directive
-							return false;
-						}
-
-						// checked requirements for this runningDirective, move to next
-						break CONFLICT_CHECK;
+						this.runnablesToRemove.add(runningRunnable);
+						didInterrupt = true;
 					}
 				}
 			}
 		}
+		return didInterrupt;
+	}
 
-		for (Runnable activeRunnable : this.runnablesToAdd) {
-			// check for conflicts
-			CONFLICT_CHECK:
-			// for every subsystem required by the new directive
-			for (Subsystem requiredByNew : runnableToStart.getRequiredSubsystems()) {
-				// for every subsystem required by the running directive
-				for (Subsystem requiredByRunning : activeRunnable.getRequiredSubsystems()) {
-					if (requiredByNew == requiredByRunning) {
-						// CONFLICT FOUND!
-
-						if (activeRunnable.getInterruptible()) {
-							runnablesToRemove.add(activeRunnable);
-							didInterrupt = true;
-						} else {
-							// running command unable to be interrupted, so can't schedule new directive
-							return false;
-						}
-
-						// checked requirements for this runningDirective, move to next
-						break CONFLICT_CHECK;
-					}
-				}
-			}
+	private boolean startRunnable(Runnable runnableToStart) {
+		// check for un-interruptable conflicts
+		if (
+				hasUninterruptibleConflict(runnableToStart, this.activeRunnables) ||
+				hasUninterruptibleConflict(runnableToStart, this.runnablesToAdd)
+		) {
+			// can't schedule
+			return false;
 		}
 
+		boolean didInterruptActive = interruptConflictingRunnables(runnableToStart, this.activeRunnables);
+		boolean didInterruptPending = interruptConflictingRunnables(runnableToStart, this.runnablesToAdd);
+
+		// going to be started
 		this.runnablesToAdd.add(runnableToStart);
+
+		runnableToStart.setHadToInterruptToStart(didInterruptActive || didInterruptPending);
 		return true;
 	}
 
 	public void schedule(@NonNull Runnable runnableToSchedule) {
 		// prevent scheduling of the same directive multiple times
 		if (
-				this.runnableScheduleQueue.contains(runnableToSchedule) ||
+				this.pendingRunnables.contains(runnableToSchedule) ||
 				this.runnablesToAdd.contains(runnableToSchedule) ||
 				this.activeRunnables.contains(runnableToSchedule)
 		) {
@@ -131,19 +124,19 @@ public class Scheduler {
 
 		// check for starting conditions
 		if (!checkStartingConditions(runnableToSchedule)) {
-			this.runnableScheduleQueue.add(runnableToSchedule);
+			this.pendingRunnables.add(runnableToSchedule);
 			return;
 		}
 
 		// try to run
 		if (!startRunnable(runnableToSchedule)) {
 			// didn't start, so add to queue
-			this.runnableScheduleQueue.add(runnableToSchedule);
+			this.pendingRunnables.add(runnableToSchedule);
 		}
 	}
 
 	public void checkScheduleQueue() {
-		for (Iterator<Runnable> iterator = this.runnableScheduleQueue.iterator(); iterator.hasNext(); ) {
+		for (Iterator<Runnable> iterator = this.pendingRunnables.iterator(); iterator.hasNext(); ) {
 			Runnable runnable = iterator.next();
 			if (checkStartingConditions(runnable)) {
 				if (startRunnable(runnable)) {
@@ -154,18 +147,20 @@ public class Scheduler {
 	}
 
 	public void run() {
+		// check scheduled runnables and start them if possible
 		checkScheduleQueue();
 
+		// run triggers
 		for (Trigger trigger : new ArrayList<>(this.activeTriggers)) {
 			if (trigger.check()) {
 				trigger.run();
 			}
 		}
 
+		// update runnables
 		for (Runnable runnable : new ArrayList<>(this.activeRunnables)) {
 			if (runnable.getFinished()) {
 				if (!runnablesToRemove.contains(runnable)) {
-					activeTriggers.removeAll(runnable.getOwnedTriggers());
 					runnablesToRemove.add(runnable);
 				}
 			} else {
@@ -173,22 +168,27 @@ public class Scheduler {
 			}
 		}
 
+		// remove runnables to be removed
 		for (Runnable runnable : runnablesToRemove) {
-			runnable.schedulerStop(true);
 			this.activeRunnables.remove(runnable);
+			runnable.schedulerStop();
 
+			// remove the runnable's triggers
 			activeTriggers.removeAll(runnable.getOwnedTriggers());
 		}
 		runnablesToRemove.clear();
 
+		// add runnables to be added
 		for (Runnable runnable : runnablesToAdd) {
 			this.activeRunnables.add(runnable);
-			runnable.schedulerStart(false);
+			runnable.schedulerStart();
 
+			// add the runnable's triggers
 			activeTriggers.addAll(runnable.getOwnedTriggers());
 		}
 		runnablesToAdd.clear();
 
+		// if subsystem is not being used, run default directive
 		for (Subsystem subsystem : this.subsystems) {
 			Runnable defaultDirective = subsystem.getDefaultDirective();
 
@@ -199,21 +199,21 @@ public class Scheduler {
 	}
 
 	private boolean isSubsystemInUse(Subsystem subsystemToCheck) {
-		// for every running directive
-		for (Runnable activeRunnable : this.activeRunnables) {
-			// check if running directive requires subsystem
-			// includes the default directive itself but that's fine for this application
-			for (Subsystem requiredSubsystem : activeRunnable.getRequiredSubsystems()) {
-				if (requiredSubsystem == subsystemToCheck) {
-					return true;
-				}
-			}
-		}
+		List<Runnable> futureRunnables = new ArrayList<>();
+		futureRunnables.addAll(this.activeRunnables);
+		futureRunnables.addAll(this.runnablesToAdd);
 
-		for (Runnable activeRunnable : this.runnablesToAdd) {
+		// for every running directive
+		for (Runnable runnable : futureRunnables) {
 			// check if running directive requires subsystem
+
+			// ignore to-be removed directives
+			if (this.runnablesToRemove.contains(runnable)) {
+				continue;
+			}
+
 			// includes the default directive itself but that's fine for this application
-			for (Subsystem requiredSubsystem : activeRunnable.getRequiredSubsystems()) {
+			for (Subsystem requiredSubsystem : runnable.getRequiredSubsystems()) {
 				if (requiredSubsystem == subsystemToCheck) {
 					return true;
 				}
@@ -223,16 +223,16 @@ public class Scheduler {
 		return false;
 	}
 
-	public void cancelAll() {
+	public final void cancelAll() {
 		// clear all queued directives
-		this.runnableScheduleQueue.clear();
+		this.pendingRunnables.clear();
 
 		// remove all triggers
 		this.activeTriggers.clear();
 
 		// stop all directives
 		for (Runnable runnable : this.activeRunnables) {
-			runnable.schedulerStop(true);
+			runnable.schedulerStop();
 		}
 
 		// clear all running directives
@@ -242,7 +242,9 @@ public class Scheduler {
 		this.runnablesToRemove.clear();
 	}
 
-	public String getTelemetry() {
-		return String.format("Runnables Queue: %d\nActive Runnables: %d", this.runnableScheduleQueue.size(), this.activeRunnables.size());
+	@NonNull
+	@Override
+	public final String toString() {
+		return String.format("Runnables Queue: %d\nActive Runnables: %d", this.pendingRunnables.size(), this.activeRunnables.size());
 	}
 }

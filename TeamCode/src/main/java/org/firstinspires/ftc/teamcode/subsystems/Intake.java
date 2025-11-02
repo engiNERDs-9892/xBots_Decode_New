@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.directives.DefaultIntake;
@@ -43,8 +45,9 @@ public final class Intake extends Subsystem {
 		intakeMotor.setPower(intakeSpeed);
 	}
 
+	@NonNull
 	@Override
-	public String getTelemetryData() {
+	public String toString() {
 		return String.format("Intake Speed: %f", intakeSpeed);
 	}
 }

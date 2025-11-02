@@ -39,7 +39,7 @@ public class MoveTo extends Directive {
 	}
 
 	public MoveTo requires(Subsystem... subsystems) {
-		setRequires(subsystems);
+		setRequiredSubsystems(subsystems);
 		return this;
 	}
 

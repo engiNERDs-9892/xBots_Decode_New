@@ -16,10 +16,14 @@ public abstract class Runnable {
     private Condition[] startingConditions = {};
     private final List<Trigger> ownedTriggers = new ArrayList<>();
 
+    private boolean hadToInterruptToStart = false;
+
     //interruptible by default
     private boolean interruptible = true;
 
     private boolean hasFinished = false;
+
+    private boolean isRunning = false;
 
     protected abstract void start(boolean hadToInterruptToStart);
 
@@ -27,31 +31,47 @@ public abstract class Runnable {
 
     protected abstract void stop(boolean interrupted);
 
-    public final void schedulerStart(boolean hadToInterruptToStart) {
-        hasFinished = false;
+    public final void setHadToInterruptToStart(boolean hadToInterruptToStart) {
+        this.hadToInterruptToStart = hadToInterruptToStart;
+    }
+
+    public final void schedulerStart() {
+        this.hasFinished = false;
+        this.isRunning = true;
+
         start(hadToInterruptToStart);
     }
 
-    public final void schedulerStop(boolean interrupted) {
-        hasFinished = true;
-        stop(interrupted);
+    public final void schedulerStop() {
+        this.hasFinished = true;
+        this.isRunning = false;
+
+        stop(!isFinished());
     }
 
     protected abstract boolean isFinished();
 
     public final void addTrigger(Trigger trigger) {
         ownedTriggers.add(trigger);
+
+        if (this.isRunning) {
+            Scheduler.getInstance().addTrigger(trigger);
+        }
     }
 
     public final void removeTrigger(Trigger trigger) {
         ownedTriggers.remove(trigger);
+
+        if (this.isRunning) {
+            Scheduler.getInstance().removeTrigger(trigger);
+        }
     }
 
     public final List<Trigger> getOwnedTriggers() {
         return this.ownedTriggers;
     }
 
-    public final Runnable setRequires(@NonNull Subsystem... subsystems) {
+    public final Runnable setRequiredSubsystems(@NonNull Subsystem... subsystems) {
         requiredSubsystems = subsystems;
         return this;
     }

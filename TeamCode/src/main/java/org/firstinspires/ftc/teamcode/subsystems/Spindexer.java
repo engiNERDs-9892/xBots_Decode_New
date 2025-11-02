@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -64,16 +66,17 @@ public final class Spindexer extends Subsystem {
 		);
 	}
 
-	public boolean getIsIntakePosition() {
-		return isIntakePosition;
+	public boolean getIsOuttakePosition() {
+		return !isIntakePosition;
 	}
 
 	public int getSelectedSegment() {
 		return selectedSegment;
 	}
 
+	@NonNull
 	@Override
-	public String getTelemetryData() {
+	public String toString() {
 		return String.format(
 				"selectedSegment: %d\n" +
 				"isIntakePosition: %b\n" +

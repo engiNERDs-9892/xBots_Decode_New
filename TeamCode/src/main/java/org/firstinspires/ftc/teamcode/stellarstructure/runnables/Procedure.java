@@ -2,12 +2,6 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class Procedure extends Runnable {
     Directive[] directives;
     private int currentDirectiveIndex = 0;
@@ -19,7 +13,7 @@ public class Procedure extends Runnable {
 
         this.directives = directives;
 
-        setRequires();
+        setRequiredSubsystems();
         setInterruptible(false);
     }
 
