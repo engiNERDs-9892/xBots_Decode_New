@@ -302,8 +302,8 @@ public class AutoMeet1 extends LinearOpMode {
                     if (position == Position.POS2) {
                         leaveDistance = - 12.0;
                     }
-                    driveMecanum(0.5, leaveDistance, 0.0);
-                    // driveVectorMecanum(0.5, 0.0, leaveDistance, 0.0);
+                    // driveMecanum(0.5, leaveDistance, 0.0);
+                    driveVectorMecanum(0.5, 0.0, leaveDistance, 0.0);
                     // strafeMecanum(0.5, leaveDistance, 0.0);
 
                     currentState = RobotState.COMPLETE;
