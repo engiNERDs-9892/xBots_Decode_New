@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.tests;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -22,7 +23,7 @@ public class SampleTeleOpMode extends LinearOpMode {
 
     private static final double PUSHER_UP = 0.2;
     private static final double PUSHER_DOWN = 0;
-    private static final long PUSHER_TIME = 500;
+    private static final long PUSHER_TIME = 750;
 
     // --- Button edge detection ---
     private boolean previousAState = false;
@@ -46,6 +47,8 @@ public class SampleTeleOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         hw = Hardware.getInstance(hardwareMap);
         mecanumCommand = new MecanumCommand(hw);
+        hw.intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        hw.shooter.setDirection(DcMotorSimple.Direction.REVERSE);
         resetTimer = new ElapsedTime();
         hw.pusher.setPosition(PUSHER_DOWN);
         hw.sorter.setPosition(0);
@@ -105,16 +108,16 @@ public class SampleTeleOpMode extends LinearOpMode {
             previousXState = currentXState;
 
 
-            if (gamepad1.b && sorterTimer.milliseconds() > 1000){
+            if (gamepad1.b && sorterTimer.milliseconds() > 500 && !isPusherUp){
                 sorterTimer.reset();
                 if (sorterpos == 0) {
                     hw.sorter.setPosition(0);//60 degrees
                 }
                 else if (sorterpos == 1) {
-                    hw.sorter.setPosition(0.5);//60 degrees
+                    hw.sorter.setPosition(0.42);//60 degrees
                 }
                 else if (sorterpos == 2) {
-                    hw.sorter.setPosition(1);//60 degrees
+                    hw.sorter.setPosition(0.88);//60 degrees
                 }
                 sorterpos = (sorterpos+1)%3;
             }
