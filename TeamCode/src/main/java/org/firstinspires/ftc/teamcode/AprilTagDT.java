@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -64,6 +65,7 @@ public class AprilTagDT extends LinearOpMode {
     private DcMotor backLeftDrive = null;
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
+    private DcMotor intakeMotor = null;
     private double tagX = 0.0;
     private double tagY = 0.0;
     private double tagZ = 0.0;
@@ -89,6 +91,7 @@ public class AprilTagDT extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         frontRightDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         backRightDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intake_motor");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -101,9 +104,10 @@ public class AprilTagDT extends LinearOpMode {
         // Reverse the direction (flip FORWARD <-> REVERSE ) of any wheel that runs backward
         // Keep testing until ALL the wheels move the robot forward when you push the left joystick forward.
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
@@ -120,19 +124,14 @@ public class AprilTagDT extends LinearOpMode {
             double max;
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-            double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double axial   = -gamepad1.left_stick_y;;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
             double yaw;
             if (gamepad1.left_trigger > 0.5 && tagVisible) {
                 // Basic proportional control: try to turn until tagYaw ≈ 0
-                double kP = 0.02;  // tuning constant (adjust to make stable)
-                yaw = -tagYaw * kP;
-
-                // Limit correction speed
-                yaw = Math.max(-0.4, Math.min(0.4, yaw));
-                yaw = -yaw;
-
-                telemetry.addLine("Tag Lock Active!");
+                double tC = 0.02;
+                yaw = -tagYaw * tC;
+                telemetry.addLine("Tag Lock Active");
             }
             else {
                 // Normal manual control
@@ -178,6 +177,12 @@ public class AprilTagDT extends LinearOpMode {
             */
 
             // Send calculated power to wheels
+            if (gamepad1.right_trigger > 0.2){
+                intakeMotor.setPower(gamepad1.right_trigger);
+            }
+            else{
+                intakeMotor.setPower(0);
+            }
             frontLeftDrive.setPower(frontLeftPower);
             frontRightDrive.setPower(frontRightPower);
             backLeftDrive.setPower(backLeftPower);
