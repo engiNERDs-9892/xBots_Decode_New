@@ -1,0 +1,23 @@
+{
+    "java.project.sourcePaths": [
+        "TeamCode/src/main/java",
+        "FtcRobotController/src/main/java",
+        "ftc-sdk-stubs/src/main/java"
+    ],
+    "java.project.referencedLibraries": [
+        "C:/Users/SedamD/AppData/Local/Android/Sdk/platforms/android-35/android.jar",
+        "libs/**/*.jar",
+        "TeamCode/lib/**/*.jar"
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.project.outputPath": "out",
+    "files.exclude": {
+        "**/.gradle": true,
+        "**/build": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    }
+}
