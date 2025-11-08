@@ -15,10 +15,16 @@ public class JustWheels extends OpMode {
     public void loop() {
         float x;
         float y;
-        //This might be inverted when I last checked the code.
         x = gamepad1.right_stick_x;
         y = -gamepad1.left_stick_y;
 
+        //Values of gamepad
+        telemetry.addData("X Value of the GamePad", x);
+        telemetry.addData("Y Value of the GamePad", y);
+        //Drive Power
+        telemetry.addData("LeftDrive Power", y-x);
+        telemetry.addData("RightDrive Power", y+x);
+        //Set the power
         leftDrive.setPower(y - x);
         rightDrive.setPower(y + x);
 
