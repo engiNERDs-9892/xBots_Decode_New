@@ -16,6 +16,7 @@ import java.util.List;
 
 @TeleOp(name = "Red Teleop Android", group = "LionsSpark")
 public class RedTeleOpAndroid extends LinearOpMode {
+    private Robot robot;
 
     // Declare motor and servo objects
     private DcMotor frontLeft = null;
@@ -81,6 +82,8 @@ public class RedTeleOpAndroid extends LinearOpMode {
     private boolean right_bumperPressed = false;
     @Override
     public void runOpMode() {
+        robot = new Robot(hardwareMap);
+        robot.init();
         // Declares objects
         frontLeft  = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
