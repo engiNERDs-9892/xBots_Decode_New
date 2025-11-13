@@ -5,7 +5,8 @@ import org.firstinspires.ftc.teamcode.subsystems.mecanum.MecanumCommand;
 import org.firstinspires.ftc.teamcode.subsystems.odometry.PinPointOdometrySubsystem;
 
 public class TurretSubsystem {
-    private Hardware hw;    private MecanumCommand mecanumCommand;
+    private Hardware hw;
+    private MecanumCommand mecanumCommand;
     private PinPointOdometrySubsystem pinPointOdoSubsystem;
 
     public TurretSubsystem(Hardware hw) {
