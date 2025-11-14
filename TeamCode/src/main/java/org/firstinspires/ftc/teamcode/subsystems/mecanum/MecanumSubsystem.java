@@ -8,9 +8,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.util.pidcore.PIDCore;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 class MecanumSubsystem {
     //rf: right front/forward
     //rb: right back
@@ -62,8 +59,8 @@ class MecanumSubsystem {
         globalThetaController = new PIDCore(kptheta, kdtheta, kitheta);
 
         hw.lf.setDirection(DcMotorSimple.Direction.REVERSE);
-        hw.lb.setDirection(DcMotorSimple.Direction.REVERSE);
         hw.rf.setDirection(DcMotorSimple.Direction.FORWARD);
+        hw.lb.setDirection(DcMotorSimple.Direction.REVERSE);
         hw.rb.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // set motor behaviour
@@ -86,14 +83,14 @@ class MecanumSubsystem {
     }
 
     // provides more control at lower speeds
-    public void fieldOrientedMoveExponential(double x, double y, double z, double theta){
+    public void fieldOrientedMoveExponential(double x, double y, double z, double theta) {
         double newX = x * Math.cos(theta) - y * Math.sin(theta);
         double newY = x * Math.sin(theta) + y * Math.cos(theta);
 
-        rightFrontMotorOutput = - newY + newX - z;
+        rightFrontMotorOutput = -newY + newX - z;
         leftFrontMotorOutput = newY + newX + z;
-        rightBackMotorOutput = newY + newX -  z;
-        leftBackMotorOutput = - newY + newX + z;
+        rightBackMotorOutput = newY + newX - z;
+        leftBackMotorOutput = -newY + newX + z;
 
         double largest = Math.max(
                 Math.max(Math.abs(rightFrontMotorOutput), Math.abs(leftFrontMotorOutput)),
@@ -131,7 +128,7 @@ class MecanumSubsystem {
     }
 
     // resets all motor encoders
-    public void reset(){
+    public void reset() {
         hw.rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hw.rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hw.lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -143,7 +140,7 @@ class MecanumSubsystem {
     }
 
     // motorProcess(sets the powers)
-    public void motorProcess(){
+    public void motorProcess() {
         // combine main and adjustment velocities
         lfvel = lfVelMain + lfVelAdjustment1;
         lbvel = lbVelMain + lbVelAdjustment1;
@@ -166,16 +163,16 @@ class MecanumSubsystem {
         hw.rb.setVelocity(rbvel, AngleUnit.RADIANS);
         hw.lf.setVelocity(lfvel, AngleUnit.RADIANS);
     }
+
     // processes velocity control with no encoder feedback
-    public void motorProcessNoEncoder(){
+    public void motorProcessNoEncoder() {
         double lfVelTemp = lfVelMain + lfVelAdjustment1;
         double lbVelTemp = lbVelMain + lbVelAdjustment1;
         double rfVelTemp = rfVelMain + rfVelAdjustment1;
         double rbVelTemp = rbVelMain + rbVelAdjustment1;
 
         // normalize vectors (between 0 to 1)
-        double max = maxDouble( Math.abs(lfVelTemp), Math.abs(lbVelTemp), Math.abs(rfVelTemp), Math.abs(rbVelTemp) );
-        //double max = Collections.max(Arrays.asList(tempVels));
+        double max = maxDouble(Math.abs(lfVelTemp), Math.abs(lbVelTemp), Math.abs(rfVelTemp), Math.abs(rbVelTemp));
         if (max > 1) {
             lfVelTemp /= max;
             lbVelTemp /= max;
@@ -190,7 +187,7 @@ class MecanumSubsystem {
 
         // set motor powers
 
-        setPowers(rfvel,lbvel,rbvel,lfvel);
+        setPowers(rfvel, lbvel, rbvel, lfvel);
     }
 
     //    named maxDouble temporarily to avoid name conflicts with local variable
@@ -203,23 +200,22 @@ class MecanumSubsystem {
     }
 
     //
-    public void partialMove(double verticalVel, double horizontalVel, double rotationalVel){
-
-        rbVelMain = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        rfVelMain = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        lfVelMain = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        lbVelMain = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-
+    public void partialMove(double verticalVel, double horizontalVel, double rotationalVel) {
+        rbVelMain = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45))) * (1.41421356237);
+        rfVelMain = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45))) * (1.41421356237);
+        lfVelMain = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45))) * (1.41421356237);
+        lbVelMain = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45))) * (1.41421356237);
     }
 
+
     //PartialMoveAdjustment is used in GridAutoCentering, it allows the robot to auto center to the grid
-    public void partialMoveAdjustment(double verticalVel, double horizontalVel, double rotationalVel){
-
-        rbVelAdjustment1 = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        rfVelAdjustment1 = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        lfVelAdjustment1 = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        lbVelAdjustment1 = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
-
+    public void partialMoveAdjustment(boolean run, double verticalVel, double horizontalVel, double rotationalVel){
+        if (run){
+            rbVelAdjustment1 = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
+            rfVelAdjustment1 = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) + rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
+            lfVelAdjustment1 = (verticalVel * Math.cos(Math.toRadians(45)) + horizontalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
+            lbVelAdjustment1 = (-horizontalVel * Math.cos(Math.toRadians(45)) + verticalVel * Math.sin(Math.toRadians(45)) - rotationalVel * Math.sin(Math.toRadians(45)))*(1.41421356237);
+        }
     }
 
     public void turnOffInternalPID() {
@@ -230,26 +226,26 @@ class MecanumSubsystem {
     }
 
     // Basic Mecanum robot movement
-    public void move(double vertical, double horizontal, double rotational){
+    public void move(boolean run, double vertical, double horizontal, double rotational){
+        if (run){
+            rightFrontMotorOutput = (-horizontal * Math.cos(Math.toRadians(45)) + vertical * Math.sin(Math.toRadians(45)) + rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
+            leftFrontMotorOutput = (vertical * Math.cos(Math.toRadians(45)) + horizontal * Math.sin(Math.toRadians(45)) - rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
+            rightBackMotorOutput = (vertical * Math.cos(Math.toRadians(45)) + horizontal * Math.sin(Math.toRadians(45)) + rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
+            leftBackMotorOutput = (-horizontal * Math.cos(Math.toRadians(45)) + vertical * Math.sin(Math.toRadians(45)) - rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
 
-        rightFrontMotorOutput = (-horizontal * Math.cos(Math.toRadians(45)) + vertical * Math.sin(Math.toRadians(45)) + rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        leftFrontMotorOutput = (vertical * Math.cos(Math.toRadians(45)) + horizontal * Math.sin(Math.toRadians(45)) - rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        rightBackMotorOutput = (vertical * Math.cos(Math.toRadians(45)) + horizontal * Math.sin(Math.toRadians(45)) + rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
-        leftBackMotorOutput = (-horizontal * Math.cos(Math.toRadians(45)) + vertical * Math.sin(Math.toRadians(45)) - rotational * Math.sin(Math.toRadians(45)))*(1.41421356237);
-
-        setPowers(rightBackMotorOutput,leftBackMotorOutput,rightFrontMotorOutput,leftFrontMotorOutput);
-
+            setPowers(rightBackMotorOutput,leftBackMotorOutput,rightFrontMotorOutput,leftFrontMotorOutput);
+        }
     }
 
-    public void moveToPosition(double power, double degree, int position){
-
-        double y1 = power * Math.sin(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) - power * Math.cos(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
-        double x1 = power * Math.cos(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) + power * Math.sin(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
-        double y2 = power * Math.sin(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) - power * Math.cos(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
-        double x2 = power * Math.cos(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) + power * Math.sin(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
-        while (hw.rf.getCurrentPosition()<position){
-            setPowers(0,0,0,0);
-
+    public void moveToPosition(boolean run, double power, double degree, int position){
+        if (run){
+            double y1 = power * Math.sin(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) - power * Math.cos(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
+            double x1 = power * Math.cos(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) + power * Math.sin(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
+            double y2 = power * Math.sin(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) - power * Math.cos(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
+            double x2 = power * Math.cos(Math.toRadians(degree)) * Math.cos(Math.toRadians(45)) + power * Math.sin(Math.toRadians(degree)) * Math.sin(Math.toRadians(45));
+            while (hw.rf.getCurrentPosition()<position){
+                setPowers(0,0,0,0);
+            }
             setPowers(0,0,0,0);
         }
     }
@@ -273,10 +269,10 @@ class MecanumSubsystem {
     }
 
     // stop all motors
-    public void stop(){
-
-        setPowers(0,0,0,0);
-
+    public void stop(boolean run){
+        if (run){
+            setPowers(0,0,0,0);
+        }
     }
 
     // TeleOp functions
@@ -288,8 +284,8 @@ class MecanumSubsystem {
     public void fieldOrientedMove(double x, double y, double z, double theta) {
         // translate the field relative movement (joystick) into the robot relative movement
         //changed all 3 lines below
-        double newX = x * Math.cos(theta) + y * Math.sin(theta);
-        double newY = x * Math.sin(theta) - y * Math.cos(theta);
+        double newX = x * Math.cos(theta) - y * Math.sin(theta);
+        double newY = x * Math.sin(theta) + y * Math.cos(theta);
 
         // wheel power calculations
         rightFrontMotorOutput = - newY + newX - z;
@@ -318,11 +314,38 @@ class MecanumSubsystem {
         setPowers(rightFrontMotorOutput,leftBackMotorOutput,rightBackMotorOutput,leftFrontMotorOutput);
     }
 
-    public void setPowers (double x1, double x2, double y1, double y2){
-        hw.rf.setPower(x1);
-        hw.lb.setPower(x2);
-        hw.rb.setPower(y1);
-        hw.lf.setPower(y2);
+    public void normalMove(double x, double y, double z, double theta) {
+        // normal mecanum drive function
+        rightFrontMotorOutput = - y + x - z;
+        leftFrontMotorOutput = y + x + z;
+        rightBackMotorOutput = y + x -  z;
+        leftBackMotorOutput = - y + x + z;
+
+        // normalize powers to maintain ratio while staying within the range of -1 to 1
+        double largest = Math.max(
+                Math.max(Math.abs(rightFrontMotorOutput), Math.abs(leftFrontMotorOutput)),
+                Math.max(Math.abs(rightBackMotorOutput), Math.abs(leftBackMotorOutput)));
+
+        if (largest > 1) {
+            rightFrontMotorOutput /= largest;
+            leftFrontMotorOutput /= largest;
+            rightBackMotorOutput /= largest;
+            leftBackMotorOutput /= largest;
+        }
+
+        // apply scaling and set motor powers
+        rightFrontMotorOutput *= POWER_SCALE_FACTOR;
+        leftFrontMotorOutput *= POWER_SCALE_FACTOR;
+        rightBackMotorOutput *= POWER_SCALE_FACTOR;
+        leftBackMotorOutput *= POWER_SCALE_FACTOR;
+
+        setPowers(rightFrontMotorOutput,leftBackMotorOutput,rightBackMotorOutput,leftFrontMotorOutput);
+    }
+
+    public void setPowers (double rightFront, double leftFront, double rightBack, double leftBack){
+        hw.rf.setPower(rightFront);
+        hw.lb.setPower(leftFront);
+        hw.rb.setPower(rightBack);
+        hw.lf.setPower(leftBack);
     }
 }
-

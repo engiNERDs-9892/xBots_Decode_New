@@ -154,7 +154,12 @@ public class MecanumCommand {
     }
 
     public double fieldOrientedMove(double vertical, double horizontal, double rotational) {
-        mecanumSubsystem.fieldOrientedMove(vertical, horizontal, rotational, pinPointOdoSubsystem.getHeading());
+        mecanumSubsystem.fieldOrientedMove(-vertical, horizontal, rotational, pinPointOdoSubsystem.getHeading());
+        return pinPointOdoSubsystem.getHeading();
+    }
+
+    public double normalMove(double vertical, double horizontal, double rotational) {
+        mecanumSubsystem.normalMove(vertical, horizontal, rotational, pinPointOdoSubsystem.getHeading());
         return pinPointOdoSubsystem.getHeading();
     }
 
@@ -172,7 +177,7 @@ public class MecanumCommand {
     }
 
     public void processOdometry(){
-        pinPointOdoSubsystem.updateOdometry();
+        pinPointOdoSubsystem.processOdometry();
     }
 
     // Debug helper

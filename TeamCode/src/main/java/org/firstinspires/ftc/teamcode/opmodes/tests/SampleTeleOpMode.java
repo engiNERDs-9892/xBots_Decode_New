@@ -87,6 +87,7 @@ public class SampleTeleOpMode extends LinearOpMode {
         // Wait for start button to be pressed
         waitForStart();
 
+
         logitechsub = new LogitechSubsystem(hw, ALLIANCE);
 
         logitechsub.pattern();
@@ -103,9 +104,9 @@ public class SampleTeleOpMode extends LinearOpMode {
 //            }
 
             mecanumCommand.processOdometry();
-            mecanumCommand.fieldOrientedMove(
+            mecanumCommand.normalMove(
                     gamepad1.left_stick_y,
-                    gamepad1.left_stick_x,
+                    -gamepad1.left_stick_x,
                     -gamepad1.right_stick_x
             );
 
