@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.mecanum.MecanumCommand;
 import org.firstinspires.ftc.teamcode.subsystems.odometry.PinPointOdometrySubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.cameras.LimelightSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.cameras.LogitechSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.outtake.OuttakeCommand;
 
 
 @TeleOp(name = "TeleopSample", group = "TeleOp")
@@ -22,6 +23,7 @@ public class SampleTeleOpMode extends LinearOpMode {
 
     // opmodes should only own commands
     private MecanumCommand mecanumCommand;
+    private OuttakeCommand outtakeCommand;
     private LimelightSubsystem limelightsub;
     private LogitechSubsystem logitechsub;
     private ElapsedTime timer;
@@ -53,12 +55,15 @@ public class SampleTeleOpMode extends LinearOpMode {
     private static final double SORTER_SECOND_POS = 0.42;
     private static final double SORTER_THIRD_POS = 0.88;
 
+    boolean spunUp;
+
     private String ALLIANCE = "blue";
 
     @Override
     public void runOpMode() throws InterruptedException {
         hw = Hardware.getInstance(hardwareMap);
         mecanumCommand = new MecanumCommand(hw);
+        outtakeCommand = new OuttakeCommand(hw);
         limelightsub = new LimelightSubsystem(hw, telemetry);
 
         hw.intake.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -141,7 +146,12 @@ public class SampleTeleOpMode extends LinearOpMode {
             boolean currentXState = gamepad1.x;
             if (currentXState && !previousXState) {
                 isOuttakeMotorOn = !isOuttakeMotorOn;
-                hw.shooter.setPower(isOuttakeMotorOn ? 1.0 : 0.0);
+
+                if (isOuttakeMotorOn){
+                   spunUp = outtakeCommand.spinup();
+                } else if(!isOuttakeMotorOn){
+                    outtakeCommand.stopShooter();
+                }
             }
             previousXState = currentXState;
 
@@ -176,7 +186,8 @@ public class SampleTeleOpMode extends LinearOpMode {
         telemetry.addData("Y", mecanumCommand.getY());
         telemetry.addData("Pusher ON", isPusherUp);
         telemetry.addData("Pattern ", obelisk);
-        telemetry.addData("sorterpos", sorterpos);
+        telemetry.addData("TPS: ", hw.shooter.getVelocity());
+        telemetry.addData("RPM: ", hw.shooter.getVelocity() * 60.0 / 28.0);
         telemetry.update();
     }
 }

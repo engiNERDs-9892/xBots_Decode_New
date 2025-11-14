@@ -75,9 +75,6 @@ public class OuttakeSubsystem {
 
     public static double outPower(double v0, double radius){
         return (30 * v0) / (Math.PI * radius);
-
-
-
     }
 
     public double outputPositional(double targetRPM, double currentRPM) {
@@ -101,7 +98,9 @@ public class OuttakeSubsystem {
         double kF = 0.9;
         double feedForward = kF * (targetRPM / maxRPM);
 
-        outputPositionalValue = feedForward + (Kp * error) + (Kd * derivative) + (Ki * integralSum);
+        //don't need integral and derivative
+        //outputPositionalValue = feedForward + (Kp * error) + (Kd * derivative) + (Ki * integralSum);
+        outputPositionalValue = feedForward + (Kp * error);
 
         outputPositionalValue = Math.max(0.0, Math.min(outputLimit, outputPositionalValue));
 
@@ -111,6 +110,7 @@ public class OuttakeSubsystem {
 
         return outputPositionalValue;
     }
+
     public double getDistance(double limelightHeight, double targetHeight, double limelightAngle, double ty) {
         double angleToTargetDeg = limelightAngle + ty;
         double angleToTargetRad = Math.toRadians(angleToTargetDeg);
@@ -131,9 +131,9 @@ public class OuttakeSubsystem {
         shooter.setPower(outputPower);
     }
 
-
-
-
+    public double getRPM(){
+        return hw.shooter.getVelocity();
+    }
 }
 
 
