@@ -21,6 +21,6 @@ public class Drive extends OpMode {
         double x = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
 
-        drive.driveFieldRelative(y,x,turn);
+        drive.driveRobotRelative(y,x,turn);
     }
 }
