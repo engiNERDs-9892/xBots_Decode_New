@@ -33,11 +33,10 @@ repositories {
 }
 
 spotless {
-    lineEndings 'LF'
     java {
         target 'TeamCode/src/main/java/org/firstinspires/ftc/teamcode/**/*.java'
         encoding 'UTF-8'
-        googleJavaFormat('1.17.0')
+        googleJavaFormat('1.17.0').aosp()
         removeUnusedImports()
         trimTrailingWhitespace()
         indentWithSpaces(4)
