@@ -71,6 +71,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "PickleTeleOp", group = "StarterBot")
 public class PickleTeleOp extends OpMode {
     final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
+    final double LAUNCH_COOLDOWN_SECONDS = 2.0; //Minimum time between launches to prevent rapid-fire
     final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
     final double FULL_SPEED = 1.0;
 
@@ -91,6 +92,7 @@ public class PickleTeleOp extends OpMode {
     private CRServo rightFeeder = null;
 
     ElapsedTime feederTimer = new ElapsedTime();
+    ElapsedTime launchCooldownTimer = new ElapsedTime(); // Tracks time since last launch
 
     /*
      * TECH TIP: State Machines
@@ -306,6 +308,15 @@ public class PickleTeleOp extends OpMode {
          */
         telemetry.addData("Drive Mode", slowMode ? "SLOW (30%)" : "NORMAL (60%)");
         telemetry.addData("State", launchState);
+
+        // Show launch cooldown status
+        double cooldownRemaining = LAUNCH_COOLDOWN_SECONDS - launchCooldownTimer.seconds();
+        if (cooldownRemaining > 0) {
+            telemetry.addData("Launch Cooldown", "%.1f sec", cooldownRemaining);
+        } else {
+            telemetry.addData("Launch Status", "READY");
+        }
+
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("motorSpeed", launcher.getVelocity());
 
@@ -349,7 +360,8 @@ public class PickleTeleOp extends OpMode {
     void launch(boolean shotRequested) {
         switch (launchState) {
             case IDLE:
-                if (shotRequested) {
+                // Only allow a new launch if cooldown period has elapsed
+                if (shotRequested && launchCooldownTimer.seconds() >= LAUNCH_COOLDOWN_SECONDS) {
                     launchState = LaunchState.SPIN_UP;
                 }
                 break;
@@ -370,6 +382,7 @@ public class PickleTeleOp extends OpMode {
                     launchState = LaunchState.IDLE;
                     leftFeeder.setPower(STOP_SPEED);
                     rightFeeder.setPower(STOP_SPEED);
+                    launchCooldownTimer.reset(); // Start cooldown period after launch completes
                 }
                 break;
         }
