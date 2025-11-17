@@ -70,6 +70,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "PickleTeleOp", group = "StarterBot")
 public class PickleTeleOp extends OpMode {
+
     final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
     final double LAUNCH_COOLDOWN_SECONDS = 2.0; //Minimum time between launches to prevent rapid-fire
     final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
@@ -134,6 +135,11 @@ public class PickleTeleOp extends OpMode {
     @Override
     public void init() {
         launchState = LaunchState.IDLE;
+
+        // Reset timers to start counting from initialization, not object construction
+        // This ensures cooldown displays correctly and timing aligns with match start
+        feederTimer.reset();
+        launchCooldownTimer.reset();
 
         /*
          * Initialize the hardware variables. Note that the strings used here as parameters
