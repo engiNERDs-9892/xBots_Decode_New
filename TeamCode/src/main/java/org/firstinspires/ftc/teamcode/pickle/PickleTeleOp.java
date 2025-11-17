@@ -68,7 +68,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * we will also need to adjust the "PIDF" coefficients with some that are a better fit for our application.
  */
 
-@TeleOp(name = "StarterBotTeleop", group = "StarterBot")
+@TeleOp(name = "PickleTeleOp", group = "StarterBot")
 public class PickleTeleOp extends OpMode {
     final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
     final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
@@ -140,14 +140,54 @@ public class PickleTeleOp extends OpMode {
         rightFeeder = hardwareMap.get(CRServo.class, "right_feeder");
 
         /*
-         * To drive forward, most robots need the motor on one side to be reversed,
-         * because the axles point in opposite directions. Pushing the left stick forward
-         * MUST make robot go forward. So adjust these two lines based on your first test drive.
-         * Note: The settings here assume direct drive on left and right wheels. Gear
-         * Reduction or 90 Deg drives may require direction flips
+         * MOTOR DIRECTION SETUP - Why reverse one motor?
+         *
+         * Motors are physically mounted on opposite sides of the robot. When both motors
+         * spin the same direction, the wheels turn AGAINST each other (one forward, one backward),
+         * causing the robot to spin in place instead of driving forward.
+         *
+         * By reversing one motor, when you send positive power to both:
+         *   - Left motor (REVERSE): spins "backward" → left wheel goes forward
+         *   - Right motor (FORWARD): spins "forward" → right wheel goes forward
+         *   - Result: Robot drives forward! ✓
+         *
+         * Think of it like your hands: if both rotate the same way but face opposite directions,
+         * they move in opposite linear directions.
+         *
+         * IMPORTANT: Test drive your robot first! Which motor to reverse depends on your
+         * specific wiring and mechanical setup. If the robot spins or goes backward when
+         * pushing forward on the joystick, swap these REVERSE/FORWARD settings.
          */
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        /*
+         * MOTOR RUN MODE OPTIONS:
+         *
+         * Drive motors currently use the default mode: RUN_WITHOUT_ENCODER
+         * This is perfectly fine for teleop driving. Here are the three available modes:
+         *
+         * 1. RUN_WITHOUT_ENCODER (current default for drive motors)
+         *    - What it does: Direct power control - you say "give 80% power," motor gets 80% power
+         *    - Pros: Simple, responsive, instant reaction to joystick
+         *    - Cons: Speed varies under load (slows down going uphill, speeds up downhill)
+         *    - Best for: Teleop driving (what you're doing now) ✓
+         *
+         * 2. RUN_USING_ENCODER (what launcher uses below)
+         *    - What it does: Closed-loop speed control - maintains constant velocity even under varying load
+         *    - Pros: Consistent speed, smoother driving, maintains straight lines better
+         *    - Cons: Slightly less responsive, requires encoders to be properly connected
+         *    - Best for: Autonomous, or teleop if you want very smooth consistent driving
+         *
+         * 3. RUN_TO_POSITION
+         *    - What it does: Drives to a specific encoder position then stops
+         *    - Best for: Autonomous movements ("drive exactly 24 inches")
+         *
+         * You might want to switch drive motors to RUN_USING_ENCODER if:
+         *    - Robot doesn't drive straight (one motor is weaker)
+         *    - You want smoother, more consistent driving
+         *    - Battery level affects driving performance too much
+         */
 
         /*
          * Here we set our launcher to the RUN_USING_ENCODER runmode.
@@ -214,14 +254,6 @@ public class PickleTeleOp extends OpMode {
          * work to drive the robot forward, and when you move the right joystick left and right
          * both motors work to rotate the robot. Combinations of these inputs can be used to create
          * more complex maneuvers.
-         *
-         * In arcade mode:
-         *   - Left stick Y-axis → forward/backward movement (both motors work together)
-         *   - Right stick X-axis → rotation/turning (motors work in opposition)
-         *
-         * In contrast, tank mode would have:
-         *   - Left stick controls left motors directly
-         *   - Right stick controls right motors directly
          */
         arcadeDrive(-gamepad1.left_stick_y, gamepad1.right_stick_x);
 
@@ -256,6 +288,15 @@ public class PickleTeleOp extends OpMode {
     public void stop() {
     }
 
+    /*
+     * In arcade mode:
+     *   - Left stick Y-axis → forward/backward movement (both motors work together)
+     *   - Right stick X-axis → rotation/turning (motors work in opposition)
+     *
+     * In contrast, tank mode would have:
+     *   - Left stick controls left motors directly
+     *   - Right stick controls right motors directly
+     */
     void arcadeDrive(double forward, double rotate) {
         leftPower = forward + rotate;
         rightPower = forward - rotate;

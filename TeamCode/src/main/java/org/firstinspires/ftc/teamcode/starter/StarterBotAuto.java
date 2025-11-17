@@ -64,7 +64,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  */
 
 @Autonomous(name="StarterBotAuto", group="StarterBot")
-@Disabled
 public class StarterBotAuto extends OpMode
 {
 
