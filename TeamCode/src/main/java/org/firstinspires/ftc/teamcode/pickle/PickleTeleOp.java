@@ -70,6 +70,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "PickleTeleOp", group = "StarterBot")
 public class PickleTeleOp extends OpMode {
+    /*
+     * REQUIRED HARDWARE CONFIGURATION (configured in Driver Station app):
+     * - "left_drive"    : DcMotor (drive motor, left side)
+     * - "right_drive"   : DcMotor (drive motor, right side)
+     * - "launcher"      : DcMotorEx (high-speed launcher motor with encoder)
+     * - "left_feeder"   : CRServo (continuous rotation servo)
+     * - "right_feeder"  : CRServo (continuous rotation servo)
+     *
+     * MOTOR/ENCODER REQUIREMENTS:
+     * - All motors must have encoders connected to use RUN_USING_ENCODER mode
+     * - Launcher motor assumes goBILDA 5203/5204 or similar (28 CPR encoder)
+     * - Drive motors work with any standard FTC motors with encoders
+     */
 
     final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
     final double LAUNCH_COOLDOWN_SECONDS = 2.0; //Minimum time between launches to prevent rapid-fire
@@ -77,13 +90,31 @@ public class PickleTeleOp extends OpMode {
     final double FULL_SPEED = 1.0;
 
     /*
-     * When we control our launcher motor, we are using encoders. These allow the control system
-     * to read the current speed of the motor and apply more or less power to keep it at a constant
-     * velocity. Here we are setting the target, and minimum velocity that the launcher should run
-     * at. The minimum velocity is a threshold for determining when to fire.
+     * LAUNCHER VELOCITY CONFIGURATION
+     *
+     * These values control the launcher motor's speed using encoder feedback.
+     *
+     * HARDWARE ASSUMPTIONS:
+     * - Motor: goBILDA 5203/5204 Series (or similar high-speed motor)
+     * - Encoder: 28 counts per revolution (CPR) at the motor
+     * - Velocity units: Encoder ticks per second
+     *
+     * CALCULATING VELOCITY:
+     * If your motor specs say it runs at 6000 RPM max:
+     *   - 6000 RPM ÷ 60 = 100 revolutions per second
+     *   - 100 rev/sec × 28 ticks/rev = 2800 ticks/sec maximum
+     * Current target (1125 ticks/sec) ≈ 40% of a 6000 RPM motor's max speed
+     *
+     * TUNING THESE VALUES:
+     * 1. Start with a lower target velocity (e.g., 800) for safety
+     * 2. Gradually increase until launcher performs consistently
+     * 3. Set MIN_VELOCITY about 50-100 ticks below TARGET for reliability
+     * 4. Monitor telemetry "motorSpeed" to see actual velocity
+     *
+     * If using different motors/gearing, you MUST retune these values!
      */
-    final double LAUNCHER_TARGET_VELOCITY = 1125;
-    final double LAUNCHER_MIN_VELOCITY = 1075;
+    final double LAUNCHER_TARGET_VELOCITY = 1125;  // Target speed in encoder ticks/second
+    final double LAUNCHER_MIN_VELOCITY = 1075;     // Minimum speed before allowing launch
 
     // Declare OpMode members.
     private DcMotor leftDrive = null;
@@ -239,6 +270,44 @@ public class PickleTeleOp extends OpMode {
         leftFeeder.setPower(STOP_SPEED);
         rightFeeder.setPower(STOP_SPEED);
 
+        /*
+         * LAUNCHER PIDF COEFFICIENT TUNING
+         *
+         * These coefficients control how the launcher motor reaches and maintains target velocity.
+         * Format: PIDFCoefficients(P, I, D, F)
+         *
+         * Current values: P=300, I=0, D=0, F=10
+         *
+         * WHAT EACH COEFFICIENT DOES:
+         * - P (Proportional): 300
+         *   Main corrective force. Higher = faster response but can cause oscillation.
+         *   If motor overshoots/oscillates around target, decrease P.
+         *   If motor is too slow to reach target, increase P.
+         *
+         * - I (Integral): 0
+         *   Eliminates steady-state error over time. Usually 0 for velocity control.
+         *   Only increase if motor consistently stays below target velocity.
+         *
+         * - D (Derivative): 0
+         *   Dampens oscillation. Usually 0 for FTC velocity control.
+         *   Increase slightly if you reduced P but still see oscillation.
+         *
+         * - F (Feedforward): 10
+         *   Predictive component based on target velocity. Reduces reliance on P.
+         *   Calculate as: F = (12V × 60) / (motor_free_speed_RPM × ticks_per_rev)
+         *   For a 6000 RPM motor with 28 CPR: F ≈ (720) / (6000 × 28) ≈ 0.0043 per tick/sec
+         *   Scaled value: 0.0043 × target_velocity ≈ 10 for this application
+         *
+         * TUNING PROCESS:
+         * 1. Set F first using the formula above
+         * 2. Start with P=100, increase until motor reaches target quickly
+         * 3. If oscillating, reduce P by 20-30%
+         * 4. Only adjust I/D if problems persist
+         * 5. Test with actual game pieces - loaded performance may differ
+         *
+         * HARDWARE-SPECIFIC: These values are tuned for goBILDA 5203/5204 motors.
+         * If you change motors, gearing, or wheel diameter, you MUST retune!
+         */
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(300, 0, 0, 10));
 
         /*
