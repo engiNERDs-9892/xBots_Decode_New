@@ -22,13 +22,13 @@ public class Flywheel {
         FlywheelRMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
-    public void doubleA(double flywheelPower,boolean input1) {
+    public void doubleA(double flywheelPower,boolean input2) {
 
-        if (input1 && !lastButtonState) {
+        if (input2 && !lastButtonState) {
             motorRunning = !motorRunning;
         }
         FlywheelLMotor.setPower(motorRunning ? flywheelPower : 0.0);
         FlywheelRMotor.setPower(motorRunning ? flywheelPower : 0.0);
-        lastButtonState = input1;
+        lastButtonState = input2;
         }
 }
