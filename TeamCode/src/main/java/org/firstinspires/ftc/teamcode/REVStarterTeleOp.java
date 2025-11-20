@@ -70,9 +70,9 @@ public class REVStarterTeleOp extends LinearOpMode {
    */
   private void manualCoreHexAndServoControl() {
     // Manual control for the Core Hex intake
-    if (gamepad1.cross) {
+    if (gamepad1.a) {
       coreHex.setPower(0.5);
-    } else if (gamepad1.triangle) {
+    } else if (gamepad1.y) {
       coreHex.setPower(-0.5);
     }
     // Manual control for the hopper's servo
