@@ -1,7 +1,6 @@
+package org.firstinspires.ftc.teamcode.Decode_2025;
 // Copyright (c) 2024-2025 FTC 13532
 // All rights reserved.
-
-package org.firstinspires.ftc.teamcode.Decode_2025;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,14 +15,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * camera image size is 320 by 240
  */
 
-public class Husky_Sensor {
+public class DC_Husky_Sensor {
 
   private final int READ_PERIOD = 1;
 
   private HuskyLens huskyLens;
 
   // Default constructor
-  public Husky_Sensor(LinearOpMode opmode) {
+  public DC_Husky_Sensor(LinearOpMode opmode) {
     hskOp = opmode;
   }
 
@@ -46,9 +45,9 @@ public class Husky_Sensor {
   enum b {
     purple,
     green
-  };
+  }
 
-  private int objId = 0;
+    private int objId = 0;
   private int height = 0;
   private int width = 0;
   private int left = 0;
@@ -63,6 +62,8 @@ public class Husky_Sensor {
 
   public void initHuskyLens() {
     huskyLens = hskOp.hardwareMap.get(HuskyLens.class, "huskyLens");
+    // set default algorithm to color
+    HuskLensAlgorithm = "color";
 
     /*
      * Immediately expire so that the first time through we'll do the read.
@@ -126,7 +127,7 @@ public class Husky_Sensor {
         if (blocks[i].top > GTop) { // larger = closest ball
           GTop = blocks[i].top;
           GId = blocks[i].id;
-          objId = blocks[i].id;
+          objId = GId;
           height = blocks[i].height;
           width = blocks[i].width;
           left = blocks[i].left;

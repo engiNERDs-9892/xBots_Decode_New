@@ -1,7 +1,5 @@
-// Copyright (c) 2024-2025 FTC 13532
+package org.firstinspires.ftc.teamcode.Decode_2025;// Copyright (c) 2024-2025 FTC 13532
 // All rights reserved.
-
-package org.firstinspires.ftc.teamcode.Decode_2025;
 
 /*
  *-* Control configuration
@@ -11,15 +9,17 @@ package org.firstinspires.ftc.teamcode.Decode_2025;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @Autonomous
-public class SwerveAutomaton extends LinearOpMode {
+public class _SwerveAutomaton extends LinearOpMode {
 
   // Create a RobotHardware object to be used to access robot hardware.
   // Prefix any hardware functions with "robot." to access this class.
-  Swerve_Drive robot = new Swerve_Drive(this);
-  Odometry_Sensor odo = new Odometry_Sensor();
-  Husky_Sensor husk = new Husky_Sensor(this);
-  April_Sensor april = new April_Sensor(this);
+  DC_Swerve_Drive robot = new DC_Swerve_Drive(this);
+  DC_Odometry_Sensor odo = new DC_Odometry_Sensor(this);
+  DC_Husky_Sensor husk = new DC_Husky_Sensor(this);
+
 
   @Override
   public void runOpMode() {
@@ -28,7 +28,7 @@ public class SwerveAutomaton extends LinearOpMode {
     robot.SwerveInit();
     husk.initHuskyLens();
     husk.setAlgorithm("color");
-    april.initAprilTag();
+
     double topDrive = 0.0;
     double leftDrive = 0.0;
     // Send telemetry message to signify robot waiting;
@@ -48,24 +48,19 @@ public class SwerveAutomaton extends LinearOpMode {
       telemetry.addData("left,right :", leftDrive);
       telemetry.addLine("     April tag");
       telemetry.addLine(" *****************");
-      if (april.aprilRecognize()) {
-        telemetry.addData("Tag", april.getTagName());
-        telemetry.addData("Range", april.getTagRange());
-        telemetry.addData("Bearing", april.getTagBearing());
+
       }
       telemetry.addLine("  field location");
       telemetry.addLine(" *****************");
 
       odo.ppo.getPosition();
       odo.ppo.update();
-      telemetry.addData("position X",odo.ppo.getPosX());
-      telemetry.addData("position Y", odo.ppo.getPosY());
+      telemetry.addData("position X", odo.ppo.getPosX(DistanceUnit.INCH));
+      telemetry.addData("position Y", odo.ppo.getPosY(DistanceUnit.INCH));
 
       telemetry.update();
     } // end while run loop
 
     // sleep(500);
-    telemetry.addLine("Auto Complete");
-    telemetry.update();
-  } // end run op mode
+
 } // end class Swerve Automation

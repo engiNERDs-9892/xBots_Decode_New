@@ -1,7 +1,5 @@
-// Copyright (c) 2024-2025 FTC 13532
+package org.firstinspires.ftc.teamcode.Decode_2025;// Copyright (c) 2024-2025 FTC 13532
 // All rights reserved.
-
-package org.firstinspires.ftc.teamcode.Decode_2025;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
