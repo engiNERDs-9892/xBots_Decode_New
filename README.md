@@ -1,2 +1,2 @@
 # CLICK THE IMAGE TO SEE OUR WEBSITE AND README!!!!!
-[![Image Description](https://github.com/user-attachments/assets/611b33cf-d3f0-4a10-af44-30a1eb28b05f)](https://pinelakeroboticsteam.lovable.app/)
+[![Image Description](https://github.com/user-attachments/assets/eb8eff92-bdc2-4791-8222-a190e8b5b83d)](https://pinelakeroboticsteam.lovable.app/)
