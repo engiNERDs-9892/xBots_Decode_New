@@ -32,9 +32,7 @@ public class DriveFlywheel extends OpMode {
 
     private Limelight3A limelight;
     private IMU imu;
-    private final double rpmStep = 50;
-    private boolean upPressed = false;
-    private boolean downPressed = false;
+
 
     private FlywheelPID pid;
     Drivetrain drive = new Drivetrain();
@@ -49,6 +47,7 @@ public class DriveFlywheel extends OpMode {
     boolean autoAim = false;
     boolean yWasPressed = false;
     boolean bPrev = false;
+    boolean xPrev = false;
     boolean intakeOn = false;
 
     @Override
@@ -108,7 +107,7 @@ public class DriveFlywheel extends OpMode {
         telemetry.addData("Ty", llResult.getTy());
 
         if (gamepad1.x && !yWasPressed) {
-            autoAim = !autoAim;    // toggle
+            autoAim = !autoAim;
         }
         yWasPressed = gamepad1.x;
 
@@ -152,16 +151,21 @@ public class DriveFlywheel extends OpMode {
         if (gamepad1.b && !bPrev) {
 
             if (!intakeOn) {
-                // Trying to turn ON — only allow if below RPM limit
                 if (avgRPM < targetRPM &&  avgRPM > (targetRPM - minusTRPM)) {
                     intakeOn = true;
                 }
             } else {
-                // Trying to turn OFF — always allowed
                 intakeOn = false;
             }
         }
+        if (gamepad1.x && !xPrev) {
+            intakeOn = false;
+        }
+
         gamepad1.b = bPrev;
+        gamepad1.x = xPrev;
+
+
         SIntake.setPower(intakeOn ? 1.0 : 0.0);
 
         leftFlywheel.setPower(power);
