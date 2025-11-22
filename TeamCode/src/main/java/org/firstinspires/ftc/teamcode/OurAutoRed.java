@@ -10,10 +10,12 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class OurAuto extends LinearOpMode {
+public class OurAutoRed extends LinearOpMode {
     private DcMotorEx flywheel;
     private DcMotor feedRoller;
     private CRServo agitator;
+    private DcMotor leftDrive;
+    private DcMotor rightDrive;
     float ticksPerRev = 28 * 5 * 3; //5 and 3 is the gear reductions
     float circumference = 9.5f; //in inches
     float ticksPerInch = ticksPerRev / circumference;
@@ -36,6 +38,8 @@ public class OurAuto extends LinearOpMode {
         flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
         feedRoller = hardwareMap.get(DcMotor.class, "coreHex");
         agitator = hardwareMap.get(CRServo.class, "servo");
+        leftDrive = hardwareMap.get(DcMotor.class, "leftDrive");
+        rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
 
         flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
         feedRoller.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -53,6 +57,15 @@ public class OurAuto extends LinearOpMode {
             flywheel.setPower(0);
             agitator.setPower(0);
             feedRoller.setPower(0);
+
+            rightDrive.setPower(0.65);
+            leftDrive.setPower(-1);
+            sleep(200);
+            leftDrive.setPower(1);
+            rightDrive.setPower(0.65);
+            sleep(700);
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
 
             break;
         }
