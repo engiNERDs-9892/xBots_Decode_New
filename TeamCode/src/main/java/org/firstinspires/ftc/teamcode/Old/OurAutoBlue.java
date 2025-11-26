@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class OurAutoRed extends LinearOpMode {
+public class OurAutoBlue extends LinearOpMode {
     private DcMotorEx flywheel;
     private DcMotor feedRoller;
     private CRServo agitator;
@@ -58,15 +58,14 @@ public class OurAutoRed extends LinearOpMode {
             agitator.setPower(0);
             feedRoller.setPower(0);
 
-            rightDrive.setPower(0.65);
-            leftDrive.setPower(-1);
+            rightDrive.setPower(-0.65);
+            leftDrive.setPower(1);
             sleep(200);
             leftDrive.setPower(1);
             rightDrive.setPower(0.65);
             sleep(700);
             leftDrive.setPower(0);
             rightDrive.setPower(0);
-
             break;
         }
     }
