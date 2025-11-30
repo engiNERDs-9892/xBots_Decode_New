@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="DriveWithModes", group="Robot")
+@TeleOp(name="Om - Exercise 4", group="Exercises")
 public class Exercise4 extends LinearOpMode {
 
     private DcMotor frontLeft = null;
@@ -16,10 +16,10 @@ public class Exercise4 extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        frontLeft  = hardwareMap.get(DcMotor.class, "left_front_motor");
-        frontRight = hardwareMap.get(DcMotor.class, "right_front_motor");
-        rearLeft   = hardwareMap.get(DcMotor.class, "left_rear_motor");
-        rearRight  = hardwareMap.get(DcMotor.class, "right_rear_motor");
+        frontLeft  = hardwareMap.get(DcMotor.class, "front_left_motor");
+        frontRight = hardwareMap.get(DcMotor.class, "front_right_motor");
+        rearLeft   = hardwareMap.get(DcMotor.class, "back_left_motor");
+        rearRight  = hardwareMap.get(DcMotor.class, "back_right_motor");
 
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         rearLeft.setDirection(DcMotor.Direction.REVERSE);
