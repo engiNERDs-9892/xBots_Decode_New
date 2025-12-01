@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -36,6 +38,15 @@ public class TeleOpMode extends OpMode
     private DcMotor rearLeft = null;
     private DcMotor frontRight = null;
     private DcMotor rearRight = null;
+    private DcMotor intake = null;
+    private DcMotor rightLauncher = null;
+    private DcMotor leftLauncher = null;
+    // private DcMotor leftLauncher = null;
+
+    // servos
+    private CRServo rightLaunch = null;
+    private CRServo leftLaunch = null;
+    private Servo intakeSelect = null;
 
 
     /*
@@ -55,13 +66,21 @@ public class TeleOpMode extends OpMode
         rearLeft = hardwareMap.get(DcMotor.class, "leftBack");
         frontRight = hardwareMap.get(DcMotor.class, "rightFront");
         rearRight = hardwareMap.get(DcMotor.class, "rightBack");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        rightLauncher = hardwareMap.get(DcMotor.class, "rightLauncher");
+        leftLauncher = hardwareMap.get(DcMotor.class, "leftLauncher");
+
+        rightLaunch = hardwareMap.get(CRServo.class, "rightLaunch");
+        leftLaunch = hardwareMap.get(CRServo.class, "leftLaunch");
+        intakeSelect = hardwareMap.get(Servo.class, "intakeSelect");
 
 
         //SETTINGS FOR MOTORS
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        rearLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        rearLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
-        rearRight.setDirection(DcMotor.Direction.FORWARD);
+        rearRight.setDirection(DcMotor.Direction.REVERSE);
+        leftLauncher.setDirection(DcMotor.Direction.REVERSE);
 
         //intakeMotor.setDirection(DcMotor.Direction.FORWARD);
         //door.setPosition(0);
@@ -92,10 +111,11 @@ public class TeleOpMode extends OpMode
         double rearLeftPower;
         double frontRightPower;
         double rearRightPower;
+        double launcherPower = 0.7;
 
-        double y = gamepad1.left_stick_y * -1;
-        double x = gamepad1.left_stick_x * 1.5;
-        double pivot = gamepad1.right_stick_x;
+        double y = gamepad1.left_stick_y * 1;
+        double x = gamepad1.left_stick_x * -1.5;
+        double pivot = -1 * gamepad1.right_stick_x;
 
         frontLeftPower = (pivot+y+x);
         rearLeftPower = (pivot+y-x);
@@ -117,6 +137,58 @@ public class TeleOpMode extends OpMode
             rearLeft.setPower(rearLeftPower * .9);
             rearRight.setPower(rearRightPower * .9);
         }
+
+        if (gamepad2.dpad_left) {
+            rightLaunch.setDirection(CRServo.Direction.FORWARD);
+            rightLaunch.setPower(1.0);
+        } else {
+            rightLaunch.setPower(0.0);
+        }
+
+        if (gamepad2.dpad_right) {
+            leftLaunch.setDirection(CRServo.Direction.REVERSE);
+            leftLaunch.setPower(1.0);
+
+        } else {
+            leftLaunch.setPower(0.0);
+        }
+
+        if (gamepad2.x) {
+            rightLauncher.setPower(launcherPower);
+            leftLauncher.setPower(launcherPower);
+        } else {
+            rightLauncher.setPower(0.0);
+            leftLauncher.setPower(0.0);
+        }
+
+        if (gamepad2.y) {
+            intake.setPower(-0.8);
+        } else {
+            intake.setPower(0.0);
+        }
+
+        if (gamepad2.a) {
+            intakeSelect.setPosition(0.47);
+        }
+
+        if (gamepad2.b) {
+            intakeSelect.setPosition(0.63);
+        }
+
+        if (gamepad1.a) {
+            intake.setPower(0.8);
+        }
+
+//        if (gamepad1.left_bumper) {
+//            launcherPower *= 0.5;
+//            telemetry.addData("Launcher Power: ", launcherPower);
+//        }
+//
+//        if (gamepad1.right_bumper) {
+//            launcherPower *= 0.5;
+//            telemetry.addData("Launcher Power: ", launcherPower);
+//        }
+
 
 
         /*if (gamepad1.x) {
