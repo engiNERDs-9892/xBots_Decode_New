@@ -5,7 +5,9 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -117,15 +119,11 @@ public class Red extends OpMode {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         limelight.updateRobotOrientation(orientation.getYaw());
         LLResult llResult = limelight.getLatestResult();
+        double distance = 0;
         if (llResult != null && llResult.isValid()) {
             Pose3D botpose = llResult.getBotpose_MT2();
             double ty = llResult.getTy();
-            double cameraHeight = 12.0718968504; // inches
-            double targetHeight = 38.75;         // inches
-            double cameraMountAngle = 15;        // degrees
-            double angleDeg = cameraMountAngle + ty;
-            double angleRad = Math.toRadians(angleDeg);
-            double distance = (targetHeight - cameraHeight) / Math.tan(angleRad);
+            distance = -1.63 * ty + 47.45;
             double rpm = 27.78 * distance + 2277;
             rpm = Math.max(3000, Math.min(rpm, 4000));
             targetRPM = rpm;
@@ -133,6 +131,7 @@ public class Red extends OpMode {
         telemetry.addData("Ta", llResult.getTa());
         telemetry.addData("Tx", llResult.getTx());
         telemetry.addData("Ty", llResult.getTy());
+        telemetry.addData("Distance", distance);
 
 
         if (gamepad1.x && !yWasPressed) {
