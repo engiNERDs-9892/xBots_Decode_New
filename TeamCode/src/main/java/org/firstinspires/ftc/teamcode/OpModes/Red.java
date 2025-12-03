@@ -128,7 +128,7 @@ public class Red extends OpMode {
 //            double rpm = 27.78 * distance + 2577;
 //            rpm = Math.max(3000, Math.min(rpm, 5000));
 //            targetRPM = rpm;
-        }7
+        }
         telemetry.addData("Ta", llResult.getTa());
         telemetry.addData("Tx", llResult.getTx());
         telemetry.addData("Ty", llResult.getTy());
