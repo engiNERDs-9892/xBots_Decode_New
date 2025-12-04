@@ -120,7 +120,9 @@ public class OurTeleOp extends LinearOpMode {
             feedRoller.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             flywheel.setPower(0);
-            flap.setPosition(0);
+
+            flapUp = false;
+            flap.setPosition(1 - (30 * positionPerDegree));
         }
     }
     void servoBusy(float target) {
