@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.utils.TelemetryMirror;
 
 public class RobotBase {
     protected boolean TELEOP_MODE = true;
@@ -65,13 +65,13 @@ public class RobotBase {
         return mecanumDrive;
     }
 
-    public void takeAShot(Telemetry telemetry) {
+    public void takeAShot(TelemetryMirror telemetry) {
         // TODO: verify this logic
         //intake.loadBallToShooter(telemetry);
         shooter.fire(telemetry);
     }
 
-    public void run(Gamepad driverGamepad, Gamepad subsystemGamepad, Telemetry telemetry) {
+    public void run(Gamepad driverGamepad, Gamepad subsystemGamepad, TelemetryMirror telemetry) {
         if (TELEOP_MODE) {
             mecanumDrive.run(driverGamepad, telemetry);
         }
@@ -79,7 +79,7 @@ public class RobotBase {
         shooter.run(subsystemGamepad, telemetry);
     }
 
-    public void stop(Telemetry telemetry) {
+    public void stop(TelemetryMirror telemetry) {
         if (TELEOP_MODE) {
             mecanumDrive.stop(telemetry);
         }

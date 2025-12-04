@@ -1,23 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.gamepad.PanelsGamepad;
-import com.bylazar.panels.Panels;
-import com.bylazar.telemetry.JoinedTelemetry;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.robot.RobotBase;
+import org.firstinspires.ftc.teamcode.utils.TelemetryMirror;
 
 @TeleOp(name= MecanumDriveTeleOp.TELE_OP, group="Iterative Opmode")
 public class MecanumDriveTeleOp extends LinearOpMode {
 
     public static final String TELE_OP = "TeleOp";
 
-    private JoinedTelemetry joinedTelemetry;
     private RobotBase robotBase;
     private boolean usePanels = false;
+    private TelemetryMirror telemetryMirror;
 
     @Override
     public void waitForStart() {
@@ -27,14 +25,12 @@ public class MecanumDriveTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        if (usePanels) {
-            joinedTelemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
-        }
+        telemetryMirror = new TelemetryMirror(telemetry, usePanels);
 
-        telemetry.addData("Code Version", BuildConfig.VERSION_NAME);
-        telemetry.addData("Code Build Time", BuildConfig.APP_BUILD_TIME);
-        telemetry.addData(TELE_OP, "initialized");
-        telemetry.update();
+        telemetryMirror.addData("Code Version", BuildConfig.VERSION_NAME);
+        telemetryMirror.addData("Code Build Time", BuildConfig.APP_BUILD_TIME);
+        telemetryMirror.addData(TELE_OP, "initialized");
+        telemetryMirror.update();
 
         waitForStart();
 
@@ -45,8 +41,9 @@ public class MecanumDriveTeleOp extends LinearOpMode {
 
         // main loop
         while(opModeIsActive()) {
-            robotBase.run(driverGamepad, gamepad2, telemetry);
-            telemetry.update();
+            telemetryMirror.setTelemetry(telemetry);
+            robotBase.run(driverGamepad, gamepad2, telemetryMirror);
+            telemetryMirror.update();
         }
     }
 }

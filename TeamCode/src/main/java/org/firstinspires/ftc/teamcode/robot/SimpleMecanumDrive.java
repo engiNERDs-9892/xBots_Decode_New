@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.DButton;
+import org.firstinspires.ftc.teamcode.utils.TelemetryMirror;
 
 /*
  * The mecanum drivetrain involves four separate motors that spin in
@@ -82,7 +82,7 @@ public class SimpleMecanumDrive implements IMecanumDrive {
         return null;
     }
 
-    public void run(Gamepad driveGamepad, Telemetry telemetry) {
+    public void run(Gamepad driveGamepad, TelemetryMirror telemetryMirror) {
         init(driveGamepad);
         dirSwitch.update(driveGamepad.left_bumper);
 
@@ -125,17 +125,17 @@ public class SimpleMecanumDrive implements IMecanumDrive {
         backLeft.setPower(speeds[BL_SPEED_IDX]);
         backRight.setPower(speeds[BR_SPEED_IDX]);
 
-        telemetry.addData(SUBSYSTEM_NAME + " FL speed", speeds[FL_SPEED_IDX]);
-        telemetry.addData(SUBSYSTEM_NAME + " FR speed", speeds[FR_SPEED_IDX]);
-        telemetry.addData(SUBSYSTEM_NAME + " BL speed", speeds[BL_SPEED_IDX]);
-        telemetry.addData(SUBSYSTEM_NAME + " BR speed", speeds[BR_SPEED_IDX]);
+        telemetryMirror.addData(SUBSYSTEM_NAME + " FL speed", speeds[FL_SPEED_IDX]);
+        telemetryMirror.addData(SUBSYSTEM_NAME + " FR speed", speeds[FR_SPEED_IDX]);
+        telemetryMirror.addData(SUBSYSTEM_NAME + " BL speed", speeds[BL_SPEED_IDX]);
+        telemetryMirror.addData(SUBSYSTEM_NAME + " BR speed", speeds[BR_SPEED_IDX]);
     }
 
-    public void stop(Telemetry telemetry) {
+    public void stop(TelemetryMirror telemetryMirror) {
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
-        telemetry.addData(SUBSYSTEM_NAME, STOPPED);
+        telemetryMirror.addData(SUBSYSTEM_NAME, STOPPED);
     }
 }

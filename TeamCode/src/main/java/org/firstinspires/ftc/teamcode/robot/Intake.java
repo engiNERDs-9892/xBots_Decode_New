@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.utils.TelemetryMirror;
 
 public class Intake {
     private final DcMotor motor;
@@ -21,33 +19,33 @@ public class Intake {
     }
 
 
-    public void run(Gamepad gamepad, Telemetry telemetry) {
-        telemetry.addData("Intake", "started");
+    public void run(Gamepad gamepad, TelemetryMirror telemetryMirror) {
+        telemetryMirror.addData("Intake", "started");
 
         intakeRunning = (gamepad.right_trigger > triggerDZ);
-        telemetry.addData("Intake running", intakeRunning);
+        telemetryMirror.addData("Intake running", intakeRunning);
 
         if (intakeRunning) {
-            loadBallToShooter(telemetry);
+            loadBallToShooter(telemetryMirror);
         } else if (gamepad.right_bumper) {
-            momentaryReverse(telemetry);
+            momentaryReverse(telemetryMirror);
         } else {
-            stop(telemetry);
+            stop(telemetryMirror);
         }
     }
 
-    public void stop(Telemetry telemetry) {
+    public void stop(TelemetryMirror telemetryMirror) {
         motor.setPower(0);
         intakeAssistant.setPower(0);
-        telemetry.addData("Intake", "stopped");
+        telemetryMirror.addData("Intake", "stopped");
     }
 
-    public void loadBallToShooter(Telemetry telemetry) {
+    public void loadBallToShooter(TelemetryMirror telemetryMirror) {
         intakeAssistant.setPower(-intakeFwdPower);
         motor.setPower(intakeFwdPower);
     }
 
-    public void momentaryReverse(Telemetry telemetry) {
+    public void momentaryReverse(TelemetryMirror telemetryMirror) {
         intakeAssistant.setPower(-intakeRevPower);
         motor.setPower(intakeRevPower);
     }

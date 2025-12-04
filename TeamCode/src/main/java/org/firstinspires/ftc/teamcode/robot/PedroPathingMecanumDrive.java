@@ -5,9 +5,9 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.utils.DButton;
+import org.firstinspires.ftc.teamcode.utils.TelemetryMirror;
 
 /**
  * This class implements a mecanum drive but uses Pedro Pathing's drive API
@@ -62,27 +62,27 @@ public class PedroPathingMecanumDrive implements IMecanumDrive {
         return backRight;
     }
 
-    public void init(Telemetry telemetry, Pose startingPose) {
+    public void init(TelemetryMirror telemetryMirror, Pose startingPose) {
         follower.startTeleOpDrive();
         if (startingPose != null) {
         follower.setStartingPose(startingPose);
         }
         this.initialized = true;
-        telemetry.addData(SUBSYSTEM_NAME, "Initialized");
+        telemetryMirror.addData(SUBSYSTEM_NAME, "Initialized");
     }
 
     /**
      *
      * @param driveGamepad The gamepad used by the driver on the drive team
-     * @param telemetry Telemetry instance for logging useful info
+     * @param telemetryMirror Telemetry instance for logging useful info
      * @param startingPose The robot starting pose. This is used to ensure the robot knows where
      *                     it is on the field so that it can follow any autonomous paths properly
      */
-    public void run(Gamepad driveGamepad, Telemetry telemetry, Pose startingPose) {
+    public void run(Gamepad driveGamepad, TelemetryMirror telemetryMirror, Pose startingPose) {
         if (!initialized) {
-            init(telemetry, startingPose);
+            init(telemetryMirror, startingPose);
         }
-        telemetry.addData(SUBSYSTEM_NAME, "Running");
+        telemetryMirror.addData(SUBSYSTEM_NAME, "Running");
 
         follower.update();
 
@@ -101,9 +101,9 @@ public class PedroPathingMecanumDrive implements IMecanumDrive {
             follower.setTeleOpDrive(forwardSpeed, strafeSpeed, turnSpeed, ROBOT_CENTRIC_DRIVE);
         }
 
-        telemetry.addData(SUBSYSTEM_NAME + " FWD speed", forwardSpeed);
-        telemetry.addData(SUBSYSTEM_NAME + " STRAFE speed", strafeSpeed);
-        telemetry.addData(SUBSYSTEM_NAME + " TURN speed", turnSpeed);
+        telemetryMirror.addData(SUBSYSTEM_NAME + " FWD speed", forwardSpeed);
+        telemetryMirror.addData(SUBSYSTEM_NAME + " STRAFE speed", strafeSpeed);
+        telemetryMirror.addData(SUBSYSTEM_NAME + " TURN speed", turnSpeed);
     }
 
     private double getDriveSpeed(Gamepad driveGamepad) {
@@ -128,20 +128,20 @@ public class PedroPathingMecanumDrive implements IMecanumDrive {
     /**
      * This run() method doesn't set a starting pose so the drive won't be able to use
      * autonomous path following (since it won't know where it is on the field)
-     * Use {@link #run(Gamepad, Telemetry, Pose)} instead.
+     * Use {@link #run(Gamepad, TelemetryMirror, Pose)} instead.
      * @param driveGamepad The gamepad used by the driver on the drive team
-     * @param telemetry Telemetry instance for logging useful info
+     * @param telemetryMirror Telemetry instance for logging useful info
      */
     @Override
-    public void run(Gamepad driveGamepad, Telemetry telemetry) {
-        run(driveGamepad, telemetry, null);
+    public void run(Gamepad driveGamepad, TelemetryMirror telemetryMirror) {
+        run(driveGamepad, telemetryMirror, null);
     }
 
     @Override
-    public void stop(Telemetry telemetry) {
+    public void stop(TelemetryMirror telemetryMirror) {
         follower.startTeleopDrive(true);
         follower.setTeleOpDrive(0,0,0,true);
-        telemetry.addData(SUBSYSTEM_NAME, STOPPED);
+        telemetryMirror.addData(SUBSYSTEM_NAME, STOPPED);
     }
 
     public void hold() {

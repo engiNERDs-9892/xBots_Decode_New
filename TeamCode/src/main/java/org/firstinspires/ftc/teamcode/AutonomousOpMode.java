@@ -1,15 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.robot.Poses.blueLowLeavePose;
-import static org.firstinspires.ftc.teamcode.robot.Poses.blueShootingPose;
-import static org.firstinspires.ftc.teamcode.robot.Poses.redLowLeavePose;
-import static org.firstinspires.ftc.teamcode.robot.Poses.redShootingPose;
-import static org.firstinspires.ftc.teamcode.robot.Poses.redTopLeavePose;
-
-import com.bylazar.telemetry.JoinedTelemetry;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -17,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.RobotBaseAutonomous;
+import org.firstinspires.ftc.teamcode.utils.TelemetryMirror;
 
 /**
  * Based on https://pedropathing.com/docs/pathing/examples/auto
@@ -25,6 +17,7 @@ import org.firstinspires.ftc.teamcode.robot.RobotBaseAutonomous;
 @Autonomous
 public class AutonomousOpMode extends OpMode {
 
+    public static final boolean USE_PANELS = true;
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private RobotBaseAutonomous robotBase;
@@ -36,7 +29,7 @@ public class AutonomousOpMode extends OpMode {
     private PathChain blueHitAndRun;
     private PathChain blueLeaveStart1;
     private PathChain redLeaveStart1;
-    private JoinedTelemetry joinedTelemetry;
+    private TelemetryMirror telemetryMirror;
 
     private void buildPaths() {
         // TODO: build our pedro paths here
@@ -82,16 +75,16 @@ public class AutonomousOpMode extends OpMode {
         //autonomousPathUpdate();
 
         if (!done && !follower.isBusy()) {
-            follower.followPath(redLeaveStart1, true);
-            done = true;
+            follower.followPath(redLeaveStart1, USE_PANELS);
+            done = USE_PANELS;
         }
 
         // Feedback to Driver Hub for debugging
         //telemetry.addData("path state", pathState);
-        joinedTelemetry.addData("x", follower.getPose().getX());
-        joinedTelemetry.addData("y", follower.getPose().getY());
-        joinedTelemetry.addData("heading", follower.getPose().getHeading());
-        joinedTelemetry.update();
+        telemetryMirror.addData("x", follower.getPose().getX());
+        telemetryMirror.addData("y", follower.getPose().getY());
+        telemetryMirror.addData("heading", follower.getPose().getHeading());
+        telemetryMirror.update();
     }
 
     /**
@@ -101,7 +94,7 @@ public class AutonomousOpMode extends OpMode {
     @Override
     public void init() {
 
-        joinedTelemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
+        telemetryMirror = new TelemetryMirror(telemetry, USE_PANELS);
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
@@ -132,8 +125,8 @@ public class AutonomousOpMode extends OpMode {
 
         robotBase = RobotBaseAutonomous.getInstance(hardwareMap, telemetry);
 
-        joinedTelemetry.addData("Status", "initialized");
-        joinedTelemetry.update();
+        telemetryMirror.addData("Status", "initialized");
+        telemetryMirror.update();
     }
 
     /**
@@ -220,7 +213,7 @@ public class AutonomousOpMode extends OpMode {
             case AUTO_DONE:
                 // terminal state
                 // Stop robot
-                robotBase.stop(telemetry);
+                robotBase.stop(telemetryMirror);
                 break;
         }
     }

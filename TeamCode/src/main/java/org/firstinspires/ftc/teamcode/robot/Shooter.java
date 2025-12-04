@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.robot;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.ftc.localization.Encoder;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utils.DButton;
+import org.firstinspires.ftc.teamcode.utils.TelemetryMirror;
 
 public class Shooter {
     public static final String STOPPED = "stopped";
@@ -50,13 +49,13 @@ public class Shooter {
         this.fireServo = fireServo;
     }
 
-    private void init(Telemetry telemetry) {
+    private void init(TelemetryMirror telemetryMirror) {
         flywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        reset(telemetry); // Ensure firing servo at the starting position
+        reset(telemetryMirror); // Ensure firing servo at the starting position
         initialized = true;
-        telemetry.addData(SUBSYSTEM_NAME, INITIALIZED + ": " +
+        telemetryMirror.addData(SUBSYSTEM_NAME, INITIALIZED + ": " +
                 (TELEOP_MODE ? "TeleOp Mode" : "Auto Mode"));
         defaultPidCoefficients = flywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -67,17 +66,17 @@ public class Shooter {
         static double D = 0;
         static double F = 0;
     }
-    public void run(Gamepad gamepad, Telemetry telemetry) {
+    public void run(Gamepad gamepad, TelemetryMirror telemetryMirror) {
         if (!initialized) {
-            init(telemetry);
+            init(telemetryMirror);
         }
         flywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(PID.P, PID.I, PID.D, PID.F));
-        telemetry.addData("P ", defaultPidCoefficients.p);
-        telemetry.addData("I ", defaultPidCoefficients.i);
-        telemetry.addData("D ", defaultPidCoefficients.d);
-        telemetry.addData("F ", defaultPidCoefficients.f);
+        telemetryMirror.addData("P ", defaultPidCoefficients.p);
+        telemetryMirror.addData("I ", defaultPidCoefficients.i);
+        telemetryMirror.addData("D ", defaultPidCoefficients.d);
+        telemetryMirror.addData("F ", defaultPidCoefficients.f);
 
-        telemetry.addData(SUBSYSTEM_NAME, STARTED);
+        telemetryMirror.addData(SUBSYSTEM_NAME, STARTED);
         //double lastMillis = getRuntime();
 
         if (TELEOP_MODE) {
@@ -90,66 +89,66 @@ public class Shooter {
                 flywheelPower = flywheelPower + 0.025;
             }
 
-            telemetry.addData(FLYWHEEL + " power", flywheelPower);
+            telemetryMirror.addData(FLYWHEEL + " power", flywheelPower);
 
             flywheelRunning = (gamepad.left_trigger > triggerDZ);
             if (flywheelRunning) {
-                startFlywheel(telemetry,
+                startFlywheel(telemetryMirror,
                         gamepad.left_trigger * flywheelPower);
             } else {
-                stop(telemetry);
+                stop(telemetryMirror);
             }
-            telemetry.addData(FLYWHEEL + " velocity", flywheel.getVelocity());
+            telemetryMirror.addData(FLYWHEEL + " velocity", flywheel.getVelocity());
         }
 
         // Don't bind keys unless in teleop.
         if (TELEOP_MODE) {
             fireButton.update(gamepad.x);
             if (fireButton.pressed()) {
-                fire(telemetry);
+                fire(telemetryMirror);
             } else if (fireButton.released()) {
-                reset(telemetry);
+                reset(telemetryMirror);
             }
         }
        // fireTime -= getRuntime() - lastMillis;
     }
 
-    public void stop(Telemetry telemetry) {
+    public void stop(TelemetryMirror telemetry) {
         stopFlywheel(telemetry);
     }
 
-    public void stopFlywheel(Telemetry telemetry) {
-        telemetry.addData(FLYWHEEL, STOPPED);
+    public void stopFlywheel(TelemetryMirror telemetryMirror) {
+        telemetryMirror.addData(FLYWHEEL, STOPPED);
         flywheel.setVelocity(0);
         //flywheel.setPower(0);
     }
 
-    public void startFlywheel(Telemetry telemetry, double power) {
-        telemetry.addData(FLYWHEEL, power);
+    public void startFlywheel(TelemetryMirror telemetryMirror, double power) {
+        telemetryMirror.addData(FLYWHEEL, power);
         //flywheel.setPower(power);
-        telemetry.addData("Speed Command: ", power * flywheelSpeedRpm * FLYWHEEL_RPM_2_CLICKS_PER_SECOND_CONVERSION);
+        telemetryMirror.addData("Speed Command: ", power * flywheelSpeedRpm * FLYWHEEL_RPM_2_CLICKS_PER_SECOND_CONVERSION);
         flywheel.setVelocity(power * flywheelSpeedRpm * FLYWHEEL_RPM_2_CLICKS_PER_SECOND_CONVERSION);
     }
 
-    public void fire(Telemetry telemetry) {
-        telemetry.addData(SUBSYSTEM_NAME, FIRING);
+    public void fire(TelemetryMirror telemetryMirror) {
+        telemetryMirror.addData(SUBSYSTEM_NAME, FIRING);
         fireTime = firePeriodMs;
         fireServo.setPosition(fireUpPos);
     }
 
-    public void reset(Telemetry telemetry) {
-        telemetry.addData(SUBSYSTEM_NAME, "reset");
+    public void reset(TelemetryMirror telemetryMirror) {
+        telemetryMirror.addData(SUBSYSTEM_NAME, "reset");
         fireServo.setPosition(fireDownPos);
     }
 
 
     private boolean TELEOP_MODE = true;
-    public Shooter withAutonomousMode(Telemetry telemetry) {
-        enableAutonomousMode(telemetry);
+    public Shooter withAutonomousMode(TelemetryMirror telemetryMirror) {
+        enableAutonomousMode(telemetryMirror);
         return this;
     }
 
-    private void enableAutonomousMode(Telemetry telemetry) {
+    private void enableAutonomousMode(TelemetryMirror telemetryMirror) {
         TELEOP_MODE = false;
     }
 }
