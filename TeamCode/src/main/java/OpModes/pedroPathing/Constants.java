@@ -1,4 +1,4 @@
-package OpModes.pedroPathing;
+package org.firstinspires.ftc.teamcode.OpModes.pedroPathing;
 
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;

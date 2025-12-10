@@ -1,4 +1,4 @@
-package OpModes.Main;
+package org.firstinspires.ftc.teamcode.OpModes.Main;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import Constants.Shooter;
+import org.firstinspires.ftc.teamcode.Constants.Shooter;
 
 @TeleOp(name = "Hood Camera Control", group = "Main")
 public class HoodCameraControl extends LinearOpMode {

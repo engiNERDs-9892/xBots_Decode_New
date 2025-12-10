@@ -1,11 +1,11 @@
-package OpModes.IndividualTest;
+package org.firstinspires.ftc.teamcode.OpModes.IndividualTest;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "Full Servo Hardware Test", group = "Test")
+@TeleOp(name = "Test: Full Servo Hardware Test", group = "Test")
 public class PieThong extends LinearOpMode {
 
     private Servo testServo = null;

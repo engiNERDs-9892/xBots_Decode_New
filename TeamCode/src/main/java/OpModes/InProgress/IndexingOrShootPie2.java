@@ -1,4 +1,4 @@
-package OpModes.InProgress;
+package org.firstinspires.ftc.teamcode.OpModes.InProgress;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import OpModes.Main.DriveTrain;
-import ProgrammingBoard.ProgrammingBoardOTHER;
+import org.firstinspires.ftc.teamcode.OpModes.Main.DriveTrain;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard.ProgrammingBoardOTHER;
 
 @TeleOp(name = "Main Op Mode 2", group = "Linear OpMode")
 public class IndexingOrShootPie2 extends LinearOpMode {

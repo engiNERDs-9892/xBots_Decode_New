@@ -1,11 +1,11 @@
-package OpModes.IndividualTest;
+package org.firstinspires.ftc.teamcode.OpModes.IndividualTest;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import OpModes.Main.Components.Flywheel;
+import org.firstinspires.ftc.teamcode.OpModes.Main.Components.Flywheel;
 
-@TeleOp(name="FlyWheelTest Individual Control", group="Individual Test")
+@TeleOp(name="Test: FlyWheelTest Individual Control", group="Individual Test")
 public class FlyWheelTest extends OpMode {
 
     private Flywheel flywheel;

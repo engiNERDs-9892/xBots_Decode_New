@@ -1,4 +1,4 @@
-package OpModes.InProgress;
+package org.firstinspires.ftc.teamcode.OpModes.InProgress;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-import ProgrammingBoard.ProgrammingBoardOTHER;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard.ProgrammingBoardOTHER;
 @Disabled
 @TeleOp(name = "Main Op Mode", group = "Linear OpMode")
 public class IndexingOrShootSystem extends LinearOpMode {

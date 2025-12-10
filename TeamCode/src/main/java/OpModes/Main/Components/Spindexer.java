@@ -1,4 +1,4 @@
-package OpModes.Main.Components;
+package org.firstinspires.ftc.teamcode.OpModes.Main.Components;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -379,6 +379,30 @@ public class Spindexer {
 
     public static double clipDeg(double d) {
         return Range.clip(d, 0.0, MAX_DEGREES);
+    }
+
+    // ---------------- SIMPLE POSITION CONTROL (for testing) ---------------------
+    public double getTargetDegrees() {
+        return targetDegrees;
+    }
+
+    public double getServoPosition() {
+        return indexServo != null ? indexServo.getPosition() : 0.0;
+    }
+
+    public void setPositionDirect(double degrees) {
+        targetDegrees = clipDeg(degrees);
+        if (indexServo != null) {
+            indexServo.setPosition(posFromDeg(targetDegrees));
+        }
+    }
+
+    public double incrementPosition(double stepDegrees) {
+        targetDegrees = clipDeg(targetDegrees + stepDegrees);
+        if (indexServo != null) {
+            indexServo.setPosition(posFromDeg(targetDegrees));
+        }
+        return targetDegrees;
     }
 }
 

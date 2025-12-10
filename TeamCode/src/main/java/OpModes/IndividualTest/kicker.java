@@ -1,10 +1,10 @@
-package OpModes.IndividualTest;
+package org.firstinspires.ftc.teamcode.OpModes.IndividualTest;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="Kicker Servo Control", group="Individual Test")
+@TeleOp(name="Test: Kicker Servo Control", group="Individual Test")
 public class kicker extends OpMode {
 
     private Servo kickerServo;

@@ -1,41 +1,41 @@
 //NEED TO UPDATE FLYWHEEL SYNC AFTER KICKER MOVEMENT
 
-package OpModes.Main;
+package org.firstinspires.ftc.teamcode.OpModes.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import OpModes.Main.Components.Turret;
-import OpModes.Main.Components.Launcher;
-import OpModes.Main.Components.Spindexer;
-import OpModes.Main.Components.DriveTrain;
-import OpModes.Main.Components.ParkingComponent;
+import org.firstinspires.ftc.teamcode.OpModes.Main.Components.Turret;
+import org.firstinspires.ftc.teamcode.OpModes.Main.Components.Launcher;
+import org.firstinspires.ftc.teamcode.OpModes.Main.Components.Spindexer;
+import org.firstinspires.ftc.teamcode.OpModes.Main.Components.DriveTrain;
+import org.firstinspires.ftc.teamcode.OpModes.Main.Components.ParkingComponent;
 
 @TeleOp(name = "TeleOpMain", group = "Linear OpMode")
 public class TeleOpMain extends LinearOpMode {
     // Components
-    private Turret turretComponent;
-    private Launcher launcherComponent;
-    private Spindexer spindexerComponent;
-    private DriveTrain driveTrainComponent;
-    private ParkingComponent parkingComponent;
+    private Turret turret;
+    private Launcher launcher;
+    private Spindexer spindexer;
+    private DriveTrain driveTrain;
+    private ParkingComponent parking;
 
     @Override
     public void runOpMode() {
         // Initialize components
-        turretComponent = new Turret();
-        turretComponent.initialize(hardwareMap, telemetry);
+        turret = new Turret();
+        turret.initialize(hardwareMap, telemetry);
 
-        launcherComponent = new Launcher();
-        launcherComponent.initialize(hardwareMap, telemetry);
+        launcher = new Launcher();
+        launcher.initialize(hardwareMap, telemetry);
 
-        spindexerComponent = new Spindexer();
-        spindexerComponent.initialize(hardwareMap, telemetry, this);
+        spindexer = new Spindexer();
+        spindexer.initialize(hardwareMap, telemetry, this);
 
-        driveTrainComponent = new DriveTrain();
-        driveTrainComponent.initialize(hardwareMap, telemetry);
+        driveTrain = new DriveTrain();
+        driveTrain.initialize(hardwareMap, telemetry);
 
-        parkingComponent = new ParkingComponent();
-        parkingComponent.initialize(hardwareMap, telemetry);
+        parking = new ParkingComponent();
+        parking.initialize(hardwareMap, telemetry);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -43,10 +43,10 @@ public class TeleOpMain extends LinearOpMode {
 
         while (opModeIsActive()) {
             // Update launcher (flywheel)
-            launcherComponent.update();
+            launcher.update();
 
             // Update turret alignment - exit OpMode if limelight not connected (matches original behavior)
-            if (!turretComponent.update()) {
+            if (!turret.update()) {
                 return;
             }
             telemetry.update();
@@ -55,7 +55,7 @@ public class TeleOpMain extends LinearOpMode {
             double forward = -gamepad1.left_stick_y;
             double right = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
-            driveTrainComponent.update(forward, right, rotate, gamepad1.cross);
+            driveTrain.update(forward, right, rotate, gamepad1.cross);
             telemetry.update();
 
             // Update spindexer
@@ -66,20 +66,20 @@ public class TeleOpMain extends LinearOpMode {
             boolean gamepadLeftBumper = gamepad1.left_bumper;
 
             // Handle shooting button - start flywheel when X is pressed (before shooting sequence)
-            if (gamepadX && !spindexerComponent.isPrevX()) {
-                launcherComponent.setSpinning(true);
-                launcherComponent.update(); // Update flywheel power immediately
+            if (gamepadX && !spindexer.isPrevX()) {
+                launcher.setSpinning(true);
+                launcher.update(); // Update flywheel power immediately
             }
 
-            spindexerComponent.update(gamepadA, gamepadB, gamepadX, gamepadY, gamepadLeftBumper);
+            spindexer.update(gamepadA, gamepadB, gamepadX, gamepadY, gamepadLeftBumper);
 
             // Stop flywheel after 3 shots
-            if (spindexerComponent.shouldStopFlywheel()) {
-                launcherComponent.setSpinning(false);
+            if (spindexer.shouldStopFlywheel()) {
+                launcher.setSpinning(false);
             }
 
             // Update parking component
-            parkingComponent.update(gamepad1.dpad_up, gamepad1.dpad_down);
+            parking.update(gamepad1.dpad_up, gamepad1.dpad_down);
 
             telemetry.update();
             idle();

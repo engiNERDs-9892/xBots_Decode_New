@@ -1,4 +1,4 @@
-package Constants;
+package org.firstinspires.ftc.teamcode.Constants;
 
 public class Shooter {
     public static final double CAMERA_HEIGHT_METERS = 0.3556; // 14 in

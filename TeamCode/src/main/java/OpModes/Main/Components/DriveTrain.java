@@ -1,4 +1,4 @@
-package OpModes.Main.Components;
+package org.firstinspires.ftc.teamcode.OpModes.Main.Components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;

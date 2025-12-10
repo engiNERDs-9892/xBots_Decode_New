@@ -1,4 +1,4 @@
-package ProgrammingBoard;
+package org.firstinspires.ftc.teamcode.ProgrammingBoard;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;

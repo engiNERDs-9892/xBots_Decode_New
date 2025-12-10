@@ -1,10 +1,10 @@
-package OpModes.IndividualTest;
+package org.firstinspires.ftc.teamcode.OpModes.IndividualTest;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-@TeleOp(name = "Intake Test", group = "Test")
+@TeleOp(name = "Test: Intake Test", group = "Test")
 public class Intake extends LinearOpMode {
 
     private CRServo centerServo; // This is still continuous

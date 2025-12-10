@@ -1,4 +1,4 @@
-package OpModes.Main;
+package org.firstinspires.ftc.teamcode.OpModes.Main;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import Constants.Shooter;
-import ProgrammingBoard.ProgrammingBoardOTHER;
+import org.firstinspires.ftc.teamcode.Constants.Shooter;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard.ProgrammingBoardOTHER;
 
 import java.util.LinkedList;
 import java.util.Queue;

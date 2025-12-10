@@ -1,4 +1,4 @@
-package OpModes.InProgress;
+package org.firstinspires.ftc.teamcode.OpModes.InProgress;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import ProgrammingBoard.ProgrammingBoardShooter;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard.ProgrammingBoardShooter;
 
 //@Disabled
 @TeleOp(name = "Main Op Mode (CRServo Indexed)", group = "Linear OpMode")

@@ -1,9 +1,9 @@
-package OpModes.Main.Components;
+package org.firstinspires.ftc.teamcode.OpModes.Main.Components;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import ProgrammingBoard.ProgrammingBoardOTHER;
+import org.firstinspires.ftc.teamcode.ProgrammingBoard.ProgrammingBoardOTHER;
 
 public class Launcher {
     private ProgrammingBoardOTHER board;
