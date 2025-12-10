@@ -19,6 +19,11 @@ public class Flywheel {
         telemetry.update();
     }
 
+    public void initialize(HardwareMap hardwareMap, Telemetry telemetry, double initialPower) {
+        this.flywheelPower = Math.max(0.0, Math.min(1.0, initialPower));
+        initialize(hardwareMap, telemetry);
+    }
+
     public void update() {
         board.flyWheelMotor.setPower(spinning ? flywheelPower : 0);
         board.flyWheelMotor2.setPower(spinning ? flywheelPower : 0);
@@ -33,11 +38,15 @@ public class Flywheel {
     }
 
     public void setPower(double power) {
-        this.flywheelPower = power;
+        this.flywheelPower = Math.max(0.0, Math.min(1.0, power));
     }
 
     public double getPower() {
         return flywheelPower;
+    }
+
+    public void adjustPower(double increment) {
+        flywheelPower = Math.max(0.0, Math.min(1.0, flywheelPower + increment));
     }
 }
 
