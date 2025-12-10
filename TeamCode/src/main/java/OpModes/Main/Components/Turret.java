@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.List;
 
-public class TurretComponent {
+public class Turret {
     private Limelight3A limelight;
     private Servo turretServo;
     private Telemetry telemetry;
