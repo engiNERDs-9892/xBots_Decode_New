@@ -25,6 +25,7 @@ public class xBots_Driver extends LinearOpMode {
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("motorFR");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("motorBR");
         DcMotor flyWheel = hardwareMap.dcMotor.get("flyWheel");
+        DcMotor InTake  = hardwareMap.dcMotor.get("InTake");
 
         //Servos
         Servo flipper = hardwareMap.servo.get("flipper");
@@ -124,17 +125,29 @@ public class xBots_Driver extends LinearOpMode {
             if (gamepad2.aWasPressed()) {
                 flipper.setPosition(.33);
             }
-            //To Open the Claws Push y
+            //To lower Flipper y
             else if (gamepad2.aWasReleased()) {
                 flipper.setPosition(.48);
             }
 
             /////////////Hold Right Trigger to Use Fly Wheel///////////////////////
             if (gamepad2.right_trigger != 0){
-                flyWheel.setPower(.65);
+                flyWheel.setPower(.5);// MAKE SURE TO BE LESS THAN .67
             } else if (gamepad2.right_trigger == 0) {;
                 flyWheel.setPower(0);
             }
+
+            /////////////Left Stick to Control Intake Up to Intake & Down To Outtake///////////////////////
+            if (gamepad2.left_stick_y < -.1){
+                InTake.setPower(1);
+            }
+            else if(gamepad2.left_stick_y > .1 ) {
+                InTake.setPower(-1);
+            }
+            else {
+                InTake.setPower(0);
+            }
+
 
         }//OpModeIsActive
     }//RunOpMode
