@@ -127,7 +127,7 @@ public class xBots_Driver extends LinearOpMode {
             }
             //To lower Flipper y
             else if (gamepad2.aWasReleased()) {
-                flipper.setPosition(.48);
+                flipper.setPosition(.52);
             }
 
             /////////////Hold Right Trigger to Use Fly Wheel///////////////////////

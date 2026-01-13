@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 @Autonomous
-public class Auto_Blue_Xbots_3_Artifacts extends LinearOpMode {
+public class Auto_Red_Xbots_3_Artifacts_PickUp extends LinearOpMode {
 
     final int inches = 42;//converts ticks to inches traveled (537.7 ticks/rev * 1Rev/104pi mm * 1mm/0.039 in) = 42.198 ticks/inch
 
@@ -18,6 +18,7 @@ public class Auto_Blue_Xbots_3_Artifacts extends LinearOpMode {
     DcMotor motorBL = null;
     DcMotor motorBR = null;
     DcMotor flyWheel = null;
+    DcMotor InTake = null;
     Servo flipper;
 
 
@@ -35,7 +36,7 @@ public class Auto_Blue_Xbots_3_Artifacts extends LinearOpMode {
         motorBR = hardwareMap.dcMotor.get("motorBR");
         flyWheel = hardwareMap.dcMotor.get("flyWheel");
         flipper = hardwareMap.servo.get("flipper");
-
+        InTake = hardwareMap.dcMotor.get("InTake");
         //Servos
 
 
@@ -44,6 +45,7 @@ public class Auto_Blue_Xbots_3_Artifacts extends LinearOpMode {
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        InTake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -53,16 +55,17 @@ public class Auto_Blue_Xbots_3_Artifacts extends LinearOpMode {
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         flipper.setPosition(.50);
+        InTake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         waitForStart();
-        Move(directions.FORWARDS,24,.40);
         flyWheel.setPower(.48);
-        sleep (4500);
+        Move(directions.FORWARDS,24,.70);
+        sleep (2000);
         flipper.setPosition(.33);// Raiser Flipper for 1st Artifact
         sleep (1000);
         flipper.setPosition(.50);//Lower Flipper
-        sleep(1500);
+        sleep(3000);
         flipper.setPosition(.33);// Raiser Flipper for 2nd Artifact
         sleep (1000);
         flipper.setPosition(.50);//Lower Flipper
@@ -71,9 +74,41 @@ public class Auto_Blue_Xbots_3_Artifacts extends LinearOpMode {
         sleep(1000);
         flipper.setPosition(.50);
         sleep(500);
-        Move(directions.RIGHT,40,.50);
+        Move(directions.FORWARDS,5,.50);//can speed up
+        Move(directions.COUNTERCLOCKWISE,34,.60);//dont speed up.
+        Move(directions.RIGHT,30,.67);//s
+
         flyWheel.setPower(0);
-        Move(directions.COUNTERCLOCKWISE, 15, .40);
+        InTake.setPower(1.00);
+        sleep(500);
+        Move(directions.FORWARDS,40,.20);
+        sleep(1500);
+        Move(directions.BACKWARDS,30,75);
+        InTake.setPower(0);
+        flyWheel.setPower(.48);
+        sleep(500);
+        Move(directions.LEFT,35,85);
+        Move(directions.CLOCKWISE,55,.35);
+        sleep (1000);
+        flipper.setPosition(.33);// Raiser Flipper for 1st Artifact
+        sleep (1000);
+        flipper.setPosition(.50);//Lower Flipper
+        sleep(2000);
+        flipper.setPosition(.33);// Raiser Flipper for 2nd Artifact
+        sleep (1000);
+        flipper.setPosition(.50);//Lower Flipper
+        sleep(2000);
+        flipper.setPosition(.33);// Raiser Flipper for 3rd Artifact
+        sleep(1000);
+        flipper.setPosition(.50);
+        sleep(500);
+        Move(directions.COUNTERCLOCKWISE,34,.35);
+        Move(directions.RIGHT,20,.67);
+        flyWheel.setPower(0);
+        Move(directions.RIGHT,10,.30);
+
+
+
 
     }//RunOpMode
 
@@ -85,40 +120,40 @@ public class Auto_Blue_Xbots_3_Artifacts extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     // Sets the motor directions based on the directions parameter
-        if (directions == Auto_Blue_Xbots_3_Artifacts.directions.FORWARDS){
+        if (directions == Auto_Red_Xbots_3_Artifacts_PickUp.directions.FORWARDS){
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
-        else if (directions == Auto_Blue_Xbots_3_Artifacts.directions.BACKWARDS) {
+        else if (directions == Auto_Red_Xbots_3_Artifacts_PickUp.directions.BACKWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
-        else if (directions == Auto_Blue_Xbots_3_Artifacts.directions.LEFT) {
+        else if (directions == Auto_Red_Xbots_3_Artifacts_PickUp.directions.LEFT) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
 
-        else if (directions == Auto_Blue_Xbots_3_Artifacts.directions.RIGHT) {
+        else if (directions == Auto_Red_Xbots_3_Artifacts_PickUp.directions.RIGHT) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
-        else if (directions == Auto_Blue_Xbots_3_Artifacts.directions.CLOCKWISE) {
+        else if (directions == Auto_Red_Xbots_3_Artifacts_PickUp.directions.CLOCKWISE) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
-        else if (directions == Auto_Blue_Xbots_3_Artifacts.directions.COUNTERCLOCKWISE) {
+        else if (directions == Auto_Red_Xbots_3_Artifacts_PickUp.directions.COUNTERCLOCKWISE) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);

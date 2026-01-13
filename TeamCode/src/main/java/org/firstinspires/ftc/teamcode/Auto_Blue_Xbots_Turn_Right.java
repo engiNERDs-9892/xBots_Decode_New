@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-
 @Autonomous
-public class Auto_Red_Xbots extends LinearOpMode {
+public class Auto_Blue_Xbots_Turn_Right extends LinearOpMode {
 
     final int inches = 42;//converts ticks to inches traveled (537.7 ticks/rev * 1Rev/104pi mm * 1mm/0.039 in) = 42.198 ticks/inch
 
@@ -53,7 +51,7 @@ public class Auto_Red_Xbots extends LinearOpMode {
 
 
         waitForStart();;
-Move(directions.LEFT, 12,50);
+Move(directions.RIGHT, 12,50);
 
     }//RunOpMode
 
@@ -65,40 +63,40 @@ Move(directions.LEFT, 12,50);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     // Sets the motor directions based on the directions parameter
-        if (directions == Auto_Red_Xbots.directions.FORWARDS){
+        if (directions == Auto_Blue_Xbots_Turn_Right.directions.FORWARDS){
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
-        else if (directions == Auto_Red_Xbots.directions.BACKWARDS) {
+        else if (directions == Auto_Blue_Xbots_Turn_Right.directions.BACKWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
-        else if (directions == Auto_Red_Xbots.directions.LEFT) {
+        else if (directions == Auto_Blue_Xbots_Turn_Right.directions.LEFT) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
 
-        else if (directions == Auto_Red_Xbots.directions.RIGHT) {
+        else if (directions == Auto_Blue_Xbots_Turn_Right.directions.RIGHT) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
-        else if (directions == Auto_Red_Xbots.directions.CLOCKWISE) {
+        else if (directions == Auto_Blue_Xbots_Turn_Right.directions.CLOCKWISE) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
-        else if (directions == Auto_Red_Xbots.directions.COUNTERCLOCKWISE) {
+        else if (directions == Auto_Blue_Xbots_Turn_Right.directions.COUNTERCLOCKWISE) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);

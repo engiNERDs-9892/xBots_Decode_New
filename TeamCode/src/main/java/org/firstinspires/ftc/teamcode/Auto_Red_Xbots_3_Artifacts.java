@@ -56,9 +56,10 @@ public class Auto_Red_Xbots_3_Artifacts extends LinearOpMode {
 
 
         waitForStart();
-        Move(directions.BACKWARDS,48,.40);
-        flyWheel.setPower(.68);
-        sleep (4000);
+        Move(directions.FORWARDS
+                ,24,.40);
+        flyWheel.setPower(.48);
+        sleep (4500);
         flipper.setPosition(.33);// Raiser Flipper for 1st Artifact
         sleep (1000);
         flipper.setPosition(.50);//Lower Flipper
@@ -71,9 +72,9 @@ public class Auto_Red_Xbots_3_Artifacts extends LinearOpMode {
         sleep(1000);
         flipper.setPosition(.50);
         sleep(500);
-        Move(directions.RIGHT,35,.50);
+        Move(directions.LEFT,35,.50);
         flyWheel.setPower(0);
-        Move(directions.CLOCKWISE, 15, .40);
+        Move(directions.CLOCKWISE, 12, .40);
 
     }//RunOpMode
 
